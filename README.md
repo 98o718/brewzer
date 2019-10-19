@@ -1,43 +1,44 @@
-<h1 align="center">Welcome to brewzer 👋</h1>
+<h1 align="center">brewzer 🗓🍺</h1>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000" />
-  <a href="http://localhost:3000/docs" target="_blank">
-    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
-  </a>
   <a href="#" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
   </a>
 </p>
 
-> Серверная часть органайзера пивовара 🗓🍺
+> Серверная часть органайзера пивовара
 
-## Install
+## Установка
 
 ```sh
 yarn
 ```
 
-## Usage
+## Запуск
 
 ```sh
+yarn build
 yarn start
 ```
 
-## Run tests
+## Тестирование
 
 ```sh
 yarn test
 ```
 
-## Author
+## Документация
 
-👤 **98o718**
+Запустите приложение
 
-* Github: [@98o718](https://github.com/98o718)
+```sh
+yarn start:dev
+```
 
-## Show your support
+Перейдите по ссылке http://localhost:3000/docs
 
-Give a ⭐️ if this project helped you!
+## Автор
 
-***
-_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
+👤 **Калякин Максим**
+
+- Github: [@98o718](https://github.com/98o718)
