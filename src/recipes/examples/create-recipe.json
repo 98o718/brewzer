@@ -1,0 +1,68 @@
+{
+  "title": "Red Dwarf IPA",
+  "description": "Good red ale",
+  "details": "Father's most lovely recipe",
+  "ingredients": {
+    "grains": [
+      {
+        "name": "Пэйл Эль Курский",
+        "weight": 5,
+        "color": 2.4
+      },
+      {
+        "name": "Кара Кристалл 100",
+        "weight": 0.5,
+        "color": 38
+      }
+    ],
+    "hops": [
+      {
+        "name": "Fuggle",
+        "weight": 25,
+        "alpha": 4.4,
+        "type": "test",
+        "time": 15
+      },
+      {
+        "name": "Northern Brewer",
+        "weight": 20,
+        "alpha": 10.1,
+        "type": "test",
+        "time": 5
+      },
+      {
+        "name": "Tomahawk",
+        "weight": 25,
+        "alpha": 17.4,
+        "type": "test",
+        "time": 90
+      }
+    ],
+    "yeast": {
+      "name": "",
+      "weight": 11,
+      "temp": 24
+    }
+  },
+  "style": "IPA",
+  "pauses": [
+    {
+      "name": "63C",
+      "time": 60
+    },
+    {
+      "name": "70C",
+      "time": 20
+    },
+    {
+      "name": "72C",
+      "time": 20
+    },
+    {
+      "name": "78C",
+      "time": 10
+    }
+  ],
+  "type": "Светлое",
+  "volume": 25
+}

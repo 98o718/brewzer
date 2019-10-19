@@ -1,0 +1,5 @@
+db:
+  url: 'mongodb+srv://ohhadmin:QzciSsycXy1CpFc7@ohhmode-ofj2w.gcp.mongodb.net/mybeer?retryWrites=true&w=majority'
+
+jwt:
+  secret: 'topSecret123123'
