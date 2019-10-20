@@ -38,12 +38,15 @@ export class RecipesController {
     return this.recipesService.create(createRecipeDto, user)
   }
 
+  @UseInterceptors(AuthInterceptor)
+  @ApiBearerAuth()
   @Get()
-  @ApiOperation({ title: 'Get all public recipes' })
+  @ApiOperation({ title: 'Get all accessible recipes' })
   async findAll(
     @Query(ValidationPipe) findRecipeDto: FindRecipeDto,
+    @GetUser() user: UserInfo | null,
   ): Promise<Recipe[]> {
-    return await this.recipesService.findAll(findRecipeDto)
+    return await this.recipesService.findAll(findRecipeDto, user)
   }
 
   @UseInterceptors(AuthInterceptor)

@@ -62,9 +62,19 @@ export class RecipesService {
     }
   }
 
-  async findAll(findRecipeDto: FindRecipeDto): Promise<Recipe[]> {
+  async findAll(
+    findRecipeDto: FindRecipeDto,
+    user: UserInfo | null,
+  ): Promise<Recipe[]> {
     const { search } = findRecipeDto
-    return await this.search(this.publicRecipe, search)
+    const recipes = await this.search(this.publicRecipe, search)
+    if (user) {
+      const privateRecipes = await this.search(this.privateRecipe, search, {
+        userId: user.userId,
+      })
+      return recipes.concat(privateRecipes)
+    }
+    return recipes
   }
 
   async findAllByUser(
