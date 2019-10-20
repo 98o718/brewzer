@@ -6,10 +6,12 @@ import {
   IsArray,
   ArrayNotEmpty,
   ValidateIf,
+  IsEnum,
 } from 'class-validator'
 import { Type } from 'class-transformer'
 import { ApiModelProperty } from '@nestjs/swagger'
 import { RecipeType } from '../recipe-type.enum'
+import { RecipeAccessType } from '../recipe-access-type.enum'
 
 class Grain {
   @ApiModelProperty()
@@ -153,15 +155,11 @@ export class CreateRecipeDto {
 
   @ApiModelProperty()
   @IsNotEmpty()
+  @IsEnum(RecipeType)
   type: RecipeType
-
-  @ApiModelProperty()
-  @ValidateIf(o => o.type === RecipeType.PUBLIC)
-  @IsNotEmpty()
-  rating: number
 
   @ApiModelProperty()
   @ValidateIf(o => o.type === RecipeType.PRIVATE)
   @IsNotEmpty()
-  access: 'URL' | 'USER_ONLY'
+  access: RecipeAccessType
 }

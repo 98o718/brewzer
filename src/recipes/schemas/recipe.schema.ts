@@ -1,4 +1,8 @@
 import * as mongoose from 'mongoose'
+import { RecipeType } from '../recipe-type.enum'
+import { Recipe } from '../interfaces/recipe.interface'
+import uuid from 'uuidv4'
+import { RecipeAccessType } from '../recipe-access-type.enum'
 
 export const RecipeSchema = new mongoose.Schema(
   {
@@ -37,6 +41,7 @@ export const RecipeSchema = new mongoose.Schema(
     ],
     beerType: String,
     volume: Number,
+    userId: mongoose.Schema.Types.ObjectId,
   },
   { discriminatorKey: 'recipeType' },
 )
@@ -44,20 +49,25 @@ export const RecipeSchema = new mongoose.Schema(
 const PublicRecipeSchema = new mongoose.Schema({
   rating: {
     type: Number,
+    default: 0,
   },
 })
 
 const PrivateRecipeSchema = new mongoose.Schema({
   access: {
     type: String,
-    enum: ['URL', 'USER_ONLY'],
   },
+  url: String,
+})
+
+PrivateRecipeSchema.pre('save', function(this: Recipe) {
+  if (this.access === RecipeAccessType.URL) this.url = uuid()
 })
 
 export function publicRecipeDescriminator(recipe) {
-  return recipe.discriminator('PublicRecipe', PublicRecipeSchema)
+  return recipe.discriminator(RecipeType.PUBLIC, PublicRecipeSchema)
 }
 
 export function privateRecipeDescriminator(recipe) {
-  return recipe.discriminator('PrivateRecipe', PrivateRecipeSchema)
+  return recipe.discriminator(RecipeType.PRIVATE, PrivateRecipeSchema)
 }

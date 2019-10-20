@@ -1,4 +1,5 @@
 import { Document } from 'mongoose'
+import { RecipeAccessType } from '../recipe-access-type.enum'
 
 interface Grain {
   name: string
@@ -38,12 +39,18 @@ export interface Recipe extends Document {
   readonly pauses: Pause[]
   readonly beerType?: string
   readonly volume: number
+  recipeType: string
+  readonly userId: string
+  rating?: number
+  access?: RecipeAccessType
+  url?: string
 }
 
 export interface PublicRecipe extends Recipe {
-  readonly rating: number
+  rating: number
 }
 
 export interface PrivateRecipe extends Recipe {
-  readonly access: 'URL' | 'USER_ONLY'
+  readonly access: RecipeAccessType
+  url?: string
 }
