@@ -187,6 +187,34 @@ export class RecipesService {
     }
   }
 
+  async edit(
+    id: string,
+    user: UserInfo,
+    editRecipeDto: CreateRecipeDto,
+  ): Promise<Recipe> {
+    try {
+      const editable = await this.recipe.findOneAndUpdate(
+        {
+          _id: id,
+          userId: user.userId,
+        },
+        { ...editRecipeDto },
+      )
+
+      if (!editable) {
+        throw new NotFoundException(
+          `Recipe with id: "${id}" not found or you haven't permission to edit them.`,
+        )
+      }
+
+      return editable
+    } catch (error) {
+      throw new NotFoundException(
+        `Recipe with id: "${id}" not found or you haven't permission to edit them.`,
+      )
+    }
+  }
+
   async delete(id: string, user: UserInfo): Promise<void> {
     try {
       const result = await this.recipe.findOneAndDelete({

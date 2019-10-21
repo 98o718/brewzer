@@ -95,6 +95,18 @@ export class RecipesController {
 
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
+  @Patch('edit/:id')
+  @ApiOperation({ title: 'Edit recipe' })
+  async edit(
+    @Param('id') id: string,
+    @GetUser() user: UserInfo,
+    @Body(ValidationPipe) editRecipeDto: CreateRecipeDto,
+  ): Promise<Recipe> {
+    return await this.recipesService.edit(id, user, editRecipeDto)
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @Delete('/:id')
   @ApiOperation({ title: 'Delete recipe by ID' })
   async delete(
