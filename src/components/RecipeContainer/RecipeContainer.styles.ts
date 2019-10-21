@@ -1,5 +1,7 @@
 import styled from '@emotion/styled'
 
 export const RecipeContainerWrapper = styled.div`
-    display: flex;
+  display: flex;
+  padding: 50px;
+  flex-direction: column;
 `

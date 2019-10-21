@@ -5,7 +5,7 @@ export const LayoutWrapper = styled.div`
   flex-direction: column;
   min-height: 100%;
   position: relative;
-  padding-top: 50px;
+  padding-top: 60px;
   padding-bottom: 80px;
   box-sizing: border-box;
 `

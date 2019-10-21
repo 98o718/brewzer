@@ -5,16 +5,7 @@ import { ListGroup, ListGroupItem } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import { isMobile } from 'react-device-detect'
 
-type RecipeDescription = {
-  readonly id: string
-  readonly title: string
-  readonly author: string
-  readonly abv: number
-  readonly ibu: number
-  readonly np: number
-  readonly kp: number
-  readonly time: string
-}
+import { RecipeDescription } from '../../types'
 
 type RecipesListProps = {
   heading: string
@@ -33,8 +24,26 @@ const RecipesList = (props: RecipesListProps) => (
             {recipe.time}
           </span>
           <span>
-            АЛК <b>{recipe.abv}</b> IBU <b>{recipe.ibu}</b> НП{' '}
-            <b>{recipe.np}</b> КП <b>{recipe.kp}</b>
+            {recipe.abv && (
+              <>
+                АЛК <b>{recipe.abv}</b>{' '}
+              </>
+            )}
+            {recipe.ibu && (
+              <>
+                IBU <b>{recipe.ibu}</b>{' '}
+              </>
+            )}
+            {recipe.og && (
+              <>
+                НП <b>{recipe.og}</b>{' '}
+              </>
+            )}
+            {recipe.fg && (
+              <>
+                КП <b>{recipe.fg}</b>
+              </>
+            )}
           </span>
         </ListGroupItem>
       ))}

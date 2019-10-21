@@ -1,3 +1,3 @@
 export default {
-  RECIPES_URL: '/mocks/recipes.json',
+  RECIPES_URL: '/recipes', //'/mocks/recipes.json',
 }
