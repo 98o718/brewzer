@@ -51,6 +51,10 @@ export const RecipeSchema = new mongoose.Schema(
   { discriminatorKey: 'recipeType' },
 )
 
+RecipeSchema.set('toJSON', {
+  virtuals: true,
+})
+
 const PublicRecipeSchema = new mongoose.Schema({
   rating: {
     type: Number,
