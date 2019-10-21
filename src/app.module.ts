@@ -15,6 +15,7 @@ import * as config from 'config'
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
+      useFindAndModify: false,
     }),
     RecipesModule,
     AuthModule,
