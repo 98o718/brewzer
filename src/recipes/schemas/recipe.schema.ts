@@ -41,7 +41,12 @@ export const RecipeSchema = new mongoose.Schema(
     ],
     beerType: String,
     volume: Number,
+    abv: Number,
+    ibu: Number,
+    og: Number,
+    fg: Number,
     userId: mongoose.Schema.Types.ObjectId,
+    author: String,
   },
   { discriminatorKey: 'recipeType' },
 )

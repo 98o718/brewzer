@@ -49,6 +49,7 @@ export class RecipesService {
         const createdRecipe = new this.publicRecipe({
           ...createRecipeDto,
           userId: user.userId,
+          author: user.username,
         })
         return await createdRecipe.save()
       }

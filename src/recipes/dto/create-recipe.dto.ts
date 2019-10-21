@@ -153,6 +153,30 @@ export class CreateRecipeDto {
   @IsNotEmpty()
   volume: number
 
+  @ApiModelProperty({
+    required: false,
+  })
+  @IsOptional()
+  abv: number
+
+  @ApiModelProperty({
+    required: false,
+  })
+  @IsOptional()
+  ibu: number
+
+  @ApiModelProperty({
+    required: false,
+  })
+  @IsOptional()
+  og: number
+
+  @ApiModelProperty({
+    required: false,
+  })
+  @IsOptional()
+  fg: number
+
   @ApiModelProperty()
   @IsNotEmpty()
   @IsEnum(RecipeType)
