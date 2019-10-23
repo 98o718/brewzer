@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { HeaderWrapper } from './Header.styles'
+import { HeaderWrapper, HeaderButton } from './Header.styles'
 
 import {
   Collapse,
@@ -13,6 +13,7 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
+  Button,
 } from 'reactstrap'
 import { Link } from 'react-router-dom'
 
@@ -35,21 +36,31 @@ const Header: React.FC = () => {
         <Collapse isOpen={toggle} navbar>
           <Nav className="ml-auto" navbar>
             <NavItem>
-              <NavLink tag={Link} to="/recipes">
+              <NavLink
+                tag={Link}
+                to="/recipes"
+                onClick={() => setToggle(false)}
+              >
                 Рецепты
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink tag={Link} to="/events">
+              <NavLink tag={Link} to="/events" onClick={() => setToggle(false)}>
                 События
               </NavLink>
             </NavItem>
-            <NavItem>
-              <NavLink tag={Link} to="/blog">
+            {/* <NavItem>
+              <NavLink tag={Link} to="/blog" onClick={() => setToggle(false)}>
                 Блог
               </NavLink>
-            </NavItem>
-            <UncontrolledDropdown nav inNavbar>
+            </NavItem> */}
+            <HeaderButton color="success" tag={Link} to="/signin">
+              Войти
+            </HeaderButton>
+            <HeaderButton color="primary" tag={Link} to="/signup">
+              Регистрация
+            </HeaderButton>
+            {/* <UncontrolledDropdown nav inNavbar>
               <DropdownToggle nav caret>
                 Профиль
               </DropdownToggle>
@@ -59,7 +70,7 @@ const Header: React.FC = () => {
                 <DropdownItem divider />
                 <DropdownItem>Reset</DropdownItem>
               </DropdownMenu>
-            </UncontrolledDropdown>
+            </UncontrolledDropdown> */}
           </Nav>
         </Collapse>
       </Navbar>
