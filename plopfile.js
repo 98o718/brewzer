@@ -68,4 +68,73 @@ module.exports = plop => {
       },
     ],
   })
+  plop.setGenerator('p', {
+    description: 'Create a page',
+    // User input prompts provided as arguments to the template
+    prompts: [
+      {
+        // Raw text input
+        type: 'input',
+        // Variable name for this input
+        name: 'name',
+        // Prompt to display on command line
+        message: 'What is your page name?',
+      },
+    ],
+    actions: [
+      {
+        // Add a new file
+        type: 'add',
+        // Path for the new file
+        path: 'src/pages/{{pascalCase name}}Page/{{pascalCase name}}Page.tsx',
+        // Handlebars template used to generate content of new file
+        templateFile: 'plop-templates/Page.tsx.hbs',
+      },
+      {
+        // Add a new file
+        type: 'add',
+        // Path for the new file
+        path:
+          'src/pages/{{pascalCase name}}Page/{{pascalCase name}}Page.styles.ts',
+        // Handlebars template used to generate content of new file
+        templateFile: 'plop-templates/Page.styles.ts.hbs',
+      },
+      {
+        // Add a new file
+        type: 'add',
+        // Path for the new file
+        path: 'src/pages/{{pascalCase name}}Page/index.ts',
+        // Handlebars template used to generate content of new file
+        templateFile: 'plop-templates/indexPages.ts.hbs',
+      },
+      {
+        // Add a new file
+        type: 'append',
+        // Path for the new file
+        path: 'src/pages/index.ts',
+        pattern: '/*APPEND PAGE IMPORT HERE*/',
+        // Handlebars template used to generate content of new file
+        templateFile: 'plop-templates/appendPageImport.hbs',
+        abortOnFail: false,
+      },
+      {
+        // Add a new file
+        type: 'append',
+        // Path for the new file
+        path: 'src/pages/index.ts',
+        pattern: '/*APPEND PAGE EXPORT HERE*/',
+        // Handlebars template used to generate content of new file
+        templateFile: 'plop-templates/appendPageExport.hbs',
+        abortOnFail: false,
+      },
+      {
+        // Add a new file
+        type: 'add',
+        // Path for the new file
+        path: 'src/pages/index.ts',
+        // Handlebars template used to generate content of new file
+        templateFile: 'plop-templates/indexPage.ts.hbs',
+      },
+    ],
+  })
 }
