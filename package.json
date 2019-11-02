@@ -1,5 +1,5 @@
 {
-  "name": "mybeer-client",
+  "name": "brewzer-client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -10,16 +10,18 @@
     "@types/react": "16.9.5",
     "@types/react-dom": "16.9.1",
     "bootstrap": "^4.3.1",
-    "chart.js": "^2.8.0",
     "emotion-normalize": "^10.1.0",
     "react": "^16.10.2",
-    "react-chartjs-2": "^2.8.0",
+    "react-avatar": "https://github.com/98o718/react-avatar.git",
     "react-device-detect": "^1.9.10",
     "react-dom": "^16.10.2",
+    "react-dropzone": "^10.1.10",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
     "reactstrap": "^8.0.1",
-    "typescript": "3.6.3"
+    "typescript": "3.6.3",
+    "@types/react-router-dom": "^5.1.0",
+    "@types/reactstrap": "^8.0.4"
   },
   "proxy": "http://localhost:3000",
   "scripts": {
@@ -42,9 +44,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@types/react-router-dom": "^5.1.0",
-    "@types/reactstrap": "^8.0.4"
   }
 }

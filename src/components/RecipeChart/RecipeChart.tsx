@@ -19,28 +19,28 @@ const RecipeChart: React.FC = () => {
       y2: number
     }[]
   >([])
-  let temps = [
-    // {
-    //   value: 0,
-    //   time: 15,
-    // },
-    {
-      value: 63,
-      time: 60,
-    },
-    // {
-    //   value: 62,
-    //   time: 15,
-    // },
-    // {
-    //   value: 78,
-    //   time: 1,
-    // },
-    // {
-    //   value: 100,
-    //   time: 90,
-    // },
-  ]
+  // let temps = [
+  //   // {
+  //   //   value: 0,
+  //   //   time: 15,
+  //   // },
+  //   {
+  //     value: 63,
+  //     time: 60,
+  //   },
+  //   // {
+  //   //   value: 62,
+  //   //   time: 15,
+  //   // },
+  //   // {
+  //   //   value: 78,
+  //   //   time: 1,
+  //   // },
+  //   // {
+  //   //   value: 100,
+  //   //   time: 90,
+  //   // },
+  // ]
 
   useEffect(() => {
     let temps = [

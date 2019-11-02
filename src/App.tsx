@@ -12,6 +12,7 @@ import {
   RecipesContainer,
   RecipeContainer,
 } from './components'
+import { SignUpPage } from './pages'
 
 const App: React.FC = () => {
   return (
@@ -43,6 +44,7 @@ const App: React.FC = () => {
       <Layout>
         <Header />
         <Switch>
+          <Route exact path="/signup" component={SignUpPage} />
           <Route exact path="/(|recipes)" component={RecipesContainer} />
           <Route path="/recipes/:id" component={RecipeContainer} />
           <Route path="/events">{'события'}</Route>
