@@ -1,22 +1,48 @@
 import { Model } from 'mongoose'
-import { Injectable, HttpException } from '@nestjs/common'
+import { Injectable, BadRequestException } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { User } from './interfaces/user.interface'
 import { CreateUserDto } from './dto/create-user.dto'
+import { FilesService } from '../files/files.service'
+import { MailerService } from '@nest-modules/mailer'
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
+  constructor(
+    @InjectModel('User') private readonly userModel: Model<User>,
+    private readonly filesService: FilesService,
+    private readonly mailerService: MailerService,
+  ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const createdUser = new this.userModel(createUserDto)
+    const { avatar, username, password, email } = createUserDto
+    const { secure_url } = await this.filesService.uploadAvatar(avatar[0])
+    const createdUser = new this.userModel({
+      email,
+      username,
+      password,
+      avatar: secure_url,
+    })
     try {
-      return await createdUser.save()
+      const user = await createdUser.save()
+      this.mailerService
+        .sendMail({
+          to: user.email, // sender address
+          subject: 'Успешная регистрация!', // Subject line
+          template: 'sign-up', // The `.pug` or `.hbs` extension is appended automatically.
+          context: {
+            // Data to be sent to template engine.
+            email,
+            password,
+          },
+        })
+        .then(() => {})
+        .catch(error => {
+          console.log(error)
+        })
+      return user
     } catch (error) {
-      if (error.code === 11000) {
-        throw new HttpException(`User with same username is already exist`, 200)
-      }
-      throw new HttpException(error.message, 500)
+      throw new BadRequestException()
     }
   }
 

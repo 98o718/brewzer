@@ -5,11 +5,20 @@ import {
 } from '@nestjs/platform-fastify'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import { AppModule } from './app.module'
+import * as fMultiPart from 'fastify-multipart'
 
 async function bootstrap() {
+  const fAdapt = new FastifyAdapter()
+  fAdapt.register(fMultiPart, {
+    addToBody: true,
+    limits: {
+      fileSize: 5000000,
+    },
+  })
+
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    fAdapt,
   )
 
   const options = new DocumentBuilder()
@@ -24,6 +33,6 @@ async function bootstrap() {
     SwaggerModule.setup('docs', app, document)
   }
 
-  await app.listen(3000)
+  await app.listen(process.env.PORT || 3000)
 }
 bootstrap()
