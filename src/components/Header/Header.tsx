@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { HeaderWrapper, HeaderButton } from './Header.styles'
+import { HeaderWrapper, HeaderButton, AvatarWrapper } from './Header.styles'
 
 import {
   Collapse,
@@ -9,6 +9,10 @@ import {
   Nav,
   NavItem,
   NavLink,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
   // UncontrolledDropdown,
   // DropdownToggle,
   // DropdownMenu,
@@ -16,9 +20,18 @@ import {
   // Button,
 } from 'reactstrap'
 import { Link } from 'react-router-dom'
+import Avatar from 'react-avatar'
+
+import { useAtom, useAction } from '@reatom/react'
+import { authAtom, usernameAtom, avatarAtom } from '../../atoms/auth.atoms'
+import { logout } from '../../actions/auth.actions'
 
 const Header: React.FC = () => {
   const [toggle, setToggle] = useState(false)
+  const isAuth = useAtom(authAtom)
+  const username = useAtom(usernameAtom)
+  const avatar = useAtom(avatarAtom)
+  const doLogout = useAction(logout)
 
   return (
     <HeaderWrapper>
@@ -54,23 +67,60 @@ const Header: React.FC = () => {
                 Блог
               </NavLink>
             </NavItem> */}
-            <HeaderButton color="success" tag={Link} to="/signin">
-              Войти
-            </HeaderButton>
-            <HeaderButton color="primary" tag={Link} to="/signup">
-              Регистрация
-            </HeaderButton>
-            {/* <UncontrolledDropdown nav inNavbar>
-              <DropdownToggle nav caret>
-                Профиль
-              </DropdownToggle>
-              <DropdownMenu right>
-                <DropdownItem>Option 1</DropdownItem>
-                <DropdownItem>Option 2</DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem>Reset</DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown> */}
+            {isAuth ? (
+              <>
+                <AvatarWrapper>
+                  {avatar.startsWith('http') ? (
+                    <Avatar
+                      name={username}
+                      color="lightgrey"
+                      src={avatar}
+                      size="40"
+                      round
+                    />
+                  ) : (
+                    <Avatar name={avatar} size="40" round />
+                  )}
+                </AvatarWrapper>
+                <UncontrolledDropdown nav inNavbar>
+                  <DropdownToggle nav caret style={{ color: 'black' }}>
+                    {username}
+                  </DropdownToggle>
+                  <DropdownMenu right>
+                    <DropdownItem tag={Link} to="/my-recipes">
+                      Мои рецепты
+                    </DropdownItem>
+                    {/* <DropdownItem>Option 2</DropdownItem> */}
+                    <DropdownItem divider />
+                    <DropdownItem
+                      onClick={doLogout}
+                      style={{ color: '#dc3545' }}
+                    >
+                      Выход
+                    </DropdownItem>
+                  </DropdownMenu>
+                </UncontrolledDropdown>
+              </>
+            ) : (
+              <>
+                <HeaderButton
+                  color="success"
+                  tag={Link}
+                  to="/signin"
+                  onClick={() => setToggle(false)}
+                >
+                  Войти
+                </HeaderButton>
+                <HeaderButton
+                  color="primary"
+                  tag={Link}
+                  to="/signup"
+                  onClick={() => setToggle(false)}
+                >
+                  Регистрация
+                </HeaderButton>
+              </>
+            )}
           </Nav>
         </Collapse>
       </Navbar>

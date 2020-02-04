@@ -5,6 +5,10 @@ export const SignUpPageWrapper = styled.div`
   padding: 30px;
   width: 100%;
   justify-content: center;
+
+  form {
+    max-width: 475px;
+  }
 `
 export const ButtonContainer = styled.div`
   display: flex;
@@ -25,4 +29,13 @@ export const AvatarWrapper = styled.div`
       margin-left: 0 !important;
     }
   }
+`
+
+export const ButtonInner = styled.div`
+  width: 100%;
+  height: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `
