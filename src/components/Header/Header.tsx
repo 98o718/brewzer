@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { HeaderWrapper, HeaderButton, AvatarWrapper } from './Header.styles'
 
 import {
@@ -22,9 +22,12 @@ import {
 import { Link } from 'react-router-dom'
 import Avatar from 'react-avatar'
 
+import constants from '../../constants'
+
 import { useAtom, useAction } from '@reatom/react'
 import { authAtom, usernameAtom, avatarAtom } from '../../atoms/auth.atoms'
 import { logout } from '../../actions/auth.actions'
+import { useCookies } from 'react-cookie'
 
 const Header: React.FC = () => {
   const [toggle, setToggle] = useState(false)
@@ -32,6 +35,26 @@ const Header: React.FC = () => {
   const username = useAtom(usernameAtom)
   const avatar = useAtom(avatarAtom)
   const doLogout = useAction(logout)
+  const [cookies, setCookies] = useCookies()
+
+  useEffect(() => {
+    fetch(constants.VERIFY_AUTH_URL, {
+      headers: {
+        Authorization: cookies.token,
+      },
+    })
+      .then(r => {
+        if (!r.ok) {
+          doLogout()
+        }
+        return r.json()
+      })
+      .then(data => {
+        setCookies('token', `Bearer ${data.newToken}`, { maxAge: 86400 })
+      })
+      .catch(e => console.error(e.message))
+    //eslint-disable-next-line
+  }, [])
 
   return (
     <HeaderWrapper>
@@ -74,6 +97,7 @@ const Header: React.FC = () => {
                     <Avatar
                       name={username}
                       color="lightgrey"
+                      style={{ backGround: 'lightgrey' }}
                       src={avatar}
                       size="40"
                       round
