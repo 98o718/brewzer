@@ -24,7 +24,7 @@ export const fetchRefresh = async (
   const data = await request.json()
 
   if (data.newToken) {
-    cookies.set('token', data.newToken)
+    cookies.set('token', `Bearer ${data.newToken}`)
   }
 
   return { ok, data }
