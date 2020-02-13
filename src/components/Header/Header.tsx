@@ -19,7 +19,7 @@ import {
   // DropdownItem,
   // Button,
 } from 'reactstrap'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import Avatar from 'react-avatar'
 
 import constants from '../../constants'
@@ -27,7 +27,8 @@ import constants from '../../constants'
 import { useAtom, useAction } from '@reatom/react'
 import { authAtom, usernameAtom, avatarAtom } from '../../atoms/auth.atoms'
 import { logout } from '../../actions/auth.actions'
-import { useCookies } from 'react-cookie'
+import { Cookies } from 'react-cookie'
+import { fetchRefresh } from '../../utils'
 
 const Header: React.FC = () => {
   const [toggle, setToggle] = useState(false)
@@ -35,26 +36,22 @@ const Header: React.FC = () => {
   const username = useAtom(usernameAtom)
   const avatar = useAtom(avatarAtom)
   const doLogout = useAction(logout)
-  const [cookies, setCookies] = useCookies()
+
+  const history = useHistory()
 
   useEffect(() => {
-    fetch(constants.VERIFY_AUTH_URL, {
-      headers: {
-        Authorization: cookies.token,
-      },
+    history.listen(() => {
+      const token = new Cookies().get('token')
+
+      if (!token) doLogout()
     })
-      .then(r => {
-        if (!r.ok) {
-          doLogout()
-        }
-        return r.json()
-      })
-      .then(data => {
-        setCookies('token', `Bearer ${data.newToken}`, { maxAge: 86400 })
-      })
-      .catch(e => console.error(e.message))
-    //eslint-disable-next-line
-  }, [])
+
+    fetchRefresh(constants.VERIFY_AUTH_URL).then(r => {
+      if (!r.ok) {
+        doLogout()
+      }
+    })
+  }, [history, doLogout])
 
   return (
     <HeaderWrapper>
