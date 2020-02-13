@@ -86,14 +86,14 @@ export class RecipesService {
     const { search } = findRecipeDto
 
     try {
-      const { id } = await this.userService.find(username)
-
       let found: Recipe[]
 
-      if (!user || user.userId !== id) {
-        found = await this.search(this.publicRecipe, search, { userId: id })
-      } else if (user.userId === id) {
-        found = await this.search(this.recipe, search, { userId: id })
+      if (!user || user.username !== username) {
+        found = await this.search(this.publicRecipe, search, {
+          author: username,
+        })
+      } else if (user.username === username) {
+        found = await this.search(this.recipe, search, { author: username })
       }
 
       if (!found || found.length === 0) {

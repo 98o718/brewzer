@@ -20,6 +20,7 @@ import { AuthGuard } from '@nestjs/passport'
 import { GetUser } from '../auth/get-user.decorator'
 import { UserInfo } from '../users/interfaces/user-info.interface'
 import { AuthInterceptor } from '../auth/auth.interceptor'
+import { RefreshTokenInterceptor } from '../auth/refresh-token.interceptor'
 
 @Controller('recipes')
 @ApiUseTags('Recipes')
@@ -50,6 +51,7 @@ export class RecipesController {
   }
 
   @UseInterceptors(AuthInterceptor)
+  @UseInterceptors(RefreshTokenInterceptor)
   @ApiBearerAuth()
   @Get('user/:username')
   @ApiOperation({ title: "Get all user's recipes" })
