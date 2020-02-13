@@ -7,13 +7,17 @@ export const fetchRefresh = async (
   const cookies = new Cookies()
   const token = cookies.get('token')
 
-  if (init && token) {
-    init = Object.assign({}, init, {
-      headers: {
-        Authorization: token,
-      },
-    })
-  }
+  init = Object.assign(
+    {},
+    init,
+    token
+      ? {
+          headers: {
+            Authorization: token,
+          },
+        }
+      : {}
+  )
 
   const request = await fetch(input, init)
   const ok = request.ok
