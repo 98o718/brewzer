@@ -15,10 +15,11 @@ html
                                 tr
                                     td
                                         span(style='display:block; padding: 40px 50px 0;')
-                                            span(style='display:block; font:34px Arial; font-weight:bold; color:#131313;') Успешная регистрация 
+                                            span(style='display:block; font:34px Arial; font-weight:bold; color:#131313;') Восстановление доступа 
                                             span(style='display:block; font:14px Arial; color:#333333; line-height:1.6;margin-top: 10px;')
-                                                | Уважаемый пользователь, регистрация прошла успешно!
+                                                | Уважаемый пользователь, чтобы сбросить пароль нажмите на кнопку ниже!
+                                                br
                                 tr(align='center')
                                     td(style='padding-bottom: 20px')
                                         span(style='display: block;margin-top: 15px;')
-                                            a(style='display: block;text-decoration: none;width: 200px;height: 40px;background: #28A744;border-radius: 5px;color: #FFFFFF;font: 14px Arial;text-align: center;line-height: 40px;font-weight: bold;' href='https://brewzer.site/signin') Войти
+                                            a(style='display: block;text-decoration: none;width: 200px;height: 40px;background: #28A744;border-radius: 5px;color: #FFFFFF;font: 14px Arial;text-align: center;line-height: 40px;font-weight: bold;' href='https://brewzer.site/reset-password/' + username + '/' + token) Сброс

@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
   ValidateNested,
   ArrayMaxSize,
+  IsOptional,
 } from 'class-validator'
 import { Avatar } from '../../files/dto/upload-avatar.dto'
 import { Type } from 'class-transformer'
@@ -21,6 +22,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   password: string
 
+  @IsOptional()
   @ArrayMaxSize(1)
   @Type(() => Avatar)
   @ValidateNested()

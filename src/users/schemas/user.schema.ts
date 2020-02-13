@@ -18,6 +18,10 @@ export const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  withPhoto: {
+    type: Boolean,
+    required: true,
+  },
   avatar: {
     type: String,
     required: true,

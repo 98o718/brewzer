@@ -1,8 +1,16 @@
-import { Controller, Get, Request, Post, UseGuards } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  Request,
+  Post,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
 import { AuthService } from './auth.service'
 import { ApiUseTags, ApiBearerAuth, ApiImplicitBody } from '@nestjs/swagger'
 import { UserCredentials } from './dto/user-credentials.dto'
+import { RefreshTokenInterceptor } from './refresh-token.interceptor'
 
 @Controller('auth')
 @ApiUseTags('Auth')
@@ -21,9 +29,10 @@ export class AuthController {
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @UseInterceptors(RefreshTokenInterceptor)
   @ApiBearerAuth()
   @Get('me')
   getProfile(@Request() req) {
-    return req.user
+    return { newToken: req.newToken }
   }
 }

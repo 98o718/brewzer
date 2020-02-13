@@ -5,4 +5,5 @@ export interface User extends Document {
   username: string
   password: string
   avatar: string
+  withPhoto: boolean
 }
