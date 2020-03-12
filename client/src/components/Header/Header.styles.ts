@@ -19,6 +19,8 @@ export const HeaderButton = styled(Button)`
 
 export const AvatarWrapper = styled.div`
   margin-left: 15px;
+  background: lightgray;
+  border-radius: 50%;
   display: inline-flex;
   /* align-items: center; */
 
