@@ -1,11 +1,11 @@
 import React from 'react'
-import { RecipesListWrapper, Recipe } from './RecipesList.styles'
+import { RecipesListWrapper, Recipe, Lock } from './RecipesList.styles'
 
-import { ListGroup, ListGroupItem } from 'reactstrap'
+import { ListGroup, ListGroupItem, UncontrolledTooltip } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import { isMobile } from 'react-device-detect'
 
-import { RecipeDescription } from '../../types'
+import { RecipeDescription, RecipeType, RecipeAccessType } from '../../types'
 
 type RecipesListProps = {
   heading: string
@@ -18,6 +18,25 @@ const RecipesList = (props: RecipesListProps) => (
     <ListGroup>
       {props.recipes.map((recipe, index) => (
         <ListGroupItem tag={Recipe} key={index}>
+          {recipe.recipeType === RecipeType.PRIVATE && (
+            <>
+              <Lock
+                id={`recipe-type-${index}`}
+                role="img"
+                aria-label="lock emoji"
+              >
+                {recipe.access === RecipeAccessType.USER_ONLY ? '🔒' : '🔗'}
+              </Lock>
+              <UncontrolledTooltip
+                placement="bottom"
+                target={`recipe-type-${index}`}
+              >
+                {recipe.access === RecipeAccessType.USER_ONLY
+                  ? 'Доступен только Вам'
+                  : 'Доступ по ссылке'}
+              </UncontrolledTooltip>
+            </>
+          )}
           <span>
             <Link to={`/recipes/${recipe.id}`}>{recipe.title}</Link> от{' '}
             <Link to={`/users/${recipe.author}`}>{recipe.author}</Link>{' '}
