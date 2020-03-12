@@ -4,4 +4,6 @@ export default {
   SIGNIN_URL: '/auth/signin',
   FORGET_PASSWORD_URL: '/auth/forget',
   RESET_PASSWORD_URL: '/auth/reset',
+  VERIFY_AUTH_URL: '/auth/me',
+  USERS_RECIPES_URL: '/recipes/user/',
 }
