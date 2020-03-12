@@ -1,0 +1,30 @@
+addons:
+  ssh_known_hosts: '${DEPLOY_HOST}'
+before_deploy:
+  - openssl aes-256-cbc -K $encrypted_b54a387aab2c_key -iv $encrypted_b54a387aab2c_iv
+    -in deploy_rsa.enc -out /tmp/deploy_rsa -d
+  - eval "$(ssh-agent -s)"
+  - chmod 600 /tmp/deploy_rsa
+  - ssh-add /tmp/deploy_rsa
+  - echo -e "Host ${DEPLOY_HOST}\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+branches:
+  only:
+    - master
+deploy:
+  provider: script
+  script: rsync -r --quiet --delete ${TRAVIS_BUILD_DIR}/build/ ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIRECTORY}
+  skip-cleanup: true
+  on:
+    branch: master
+language: node_js
+node_js:
+  - 12
+script:
+  # - yarn test
+  - yarn build
+sudo: false
+env:
+  global:
+    - secure: SdlGnF2J8K1ZgdSvJUilTLPAypfNshcPT9Qw21AD4agIRWgO5SKPuEecJhrBSQzysrlEvhyzhW9bNw275RjAbtIZDy9+tgepeUVD7tG/Q2UhezyuOvud9NJwzQqVD2lPEKsIjB/hpFuAKrRDPrLQkeaC7bclDgu2LBB2LEio3brIkty/hDQlgRM4BiLAQrDyZ6TvMw9c/FfIylgPnPzyQkddVsxNsv0uFobkjnrbtW2ZVwSET/eHqjjKYASTAFfxr+JtbduJcYHgSTJnBo853MCCdi080uaSZzfVNovIwQ4ToLBrVBXTKiYrks5jRiBWLTJOlsa4H7FuTdgSLqgDaiawIocaqnWqKoDdPC/AAPWTqJytdC1jsO+Nb6tJCU6SCFztcoG2QiduQ0kEtk0FGzFM6UV5k5SikIMlDLdndrB1Fwo4TRPCJQnd6rNsbzW87dZyXR98gmZjAl2+mp/LV7w+Q8tFbR9GbS5IGauY4sxN8R0uiHRT6tf9bEF9EXL77r05DIMPLZxM4cj02SO8j5nag4o52YNLz/2WLXU2v9WtDL+mL/BnWkiTMCn6QcL3dVy00dd9p1dNrzYgY6mCxiU8W+UcjlcLG9w5fdnIRYCitIsdUzjAQiqCi+xz3YgTJ9rbnNmSet4qcw5IGjq55w4wkB55T76Ft//D+HFNHjU=
+    - secure: BGNUbsDQqXGjsTVHe6I4gdau7YtZyZXkwR/LeNLIys9N3SQj2uCCGsI8msFGMZ/OQ6Ncfvcegj2FLdGfpW4lTriPLEnaW0YSWTXB8FbckG/K8bnorI7//LXuftQgBDtOy4vgQ3rTreQ8j7oxAvpF1Pi+EiI/3BDNoXYkhiOKYhMrQmu43io79x63NRv9RG6QoDoaNa4dnTyjzdt3BCjiMAYHh3qbHUCzNtBJItySiJCpTaAEShdpoItyZv2hTVF+YXYBscMwmhbRNJc1wh+pTE/8PREC3NY7bk2VlKhe+zHYa2fwy2SiOLuak9RZWDvnMD26vl1b+va3p2hPTYijLtWMhL26Ov+4PvVkRtlmyxGkYqzoX2arL/hrCJ5zVlqqbpDjBr4GP/rSFbLgTsMT8Yck+EqNdST2H4UIopXKfXuS211OynPYr4+l44HCdn9xh0s7BU0ekM5ljOY8hCUYHT0Nm/Kn6aUhHPCagwEXdheEsEqWwa2QAlyNJzMzbkW1EvCKOHOHEhIh670EIhgJNexJXW0ayXIzW/OLN9MHyg9LSao1jeEVqCH+i2Rt+c2gArGybuqYOW/dH9M7vOYrO1malruu10wlWDP06CGBYjxrncgKHuvNg2l2gd2sPGfXb+uvQWg1M3Y2OPvvjttkPnakQOp8PkMy+yDWmg6ZWbs=
+    - secure: VQADPI35+Cp2dBF+HLJfKwVqp8LpEfhYtJfJcB14aLJT8hBSrTWuicvE3Rj7/hWgopK6LHXL9Qo+S5zLEkxEtYjOyd1YccVjf0rnH1xMEqShNqmMqGlMhPVpIiTEEgyTGrNSypF/Jllq/jy9LKQFs0KVzQhdQJNW37++sjUPQhr1xPC1DOeYlv5IQzrtj222e7U/gzXb4Jz/CxQ/BqOX5COtYDrvCLavqBL2qxnjRTmVntGXoiEym+iaocb+FqXKFojfms5CImNMOnRp8AHwiZD8FmE0CTyJeMUGasN/+lUfwj9lYgZq+nsjseGARcNSQPvYRsLEpkOo4sJPrWnIpHFWgN2WKlOubdFPYdAe8d2ybwpJ6veTr475X7aPoJ7zXm6LHnqGmtNaa7TJmGNbAhXhL6F3Z8hNGX8rpqt4pusETZ73E/YoUWwY6nHjEAc/KNYIML7ep1vbgVDBkWVLHubCOVRGwcC+n1jwS7o52wsNJScMEalOEWgPIUiYq6jSpBUTbh8YSbqGN7qgZeh2KvzT21hzNk/NB9H9lKx4WtIbsv45m9XeAC7S5qUAntBYPLCoWyrB1YqjEUOGaBxwgi8m+7vWmaQ/5DCHHi0dC0wvskiH5Riuja9YfTfd3wCk/kYjk7iDGKRPHeleIBL/tp1X2ssCdL+6X9dm2WhnBf0=
