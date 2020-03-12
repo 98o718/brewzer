@@ -1,7 +1,6 @@
 import { declareAction } from '@reatom/core'
+import { User } from './types'
 
-export const signIn = declareAction<{ username: string; avatar: string }>(
-  'sign_in'
-)
+export const signIn = declareAction<User>('sign_in')
 
 export const logout = declareAction('logout')
