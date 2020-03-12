@@ -42,9 +42,12 @@ export class AuthService {
         api_secret: cloudinaryConfig.apiSecret,
       })
 
-      const avatar = await cloudinary.url(user.avatar.split('upload/').pop(), {
-        height: 80,
-      })
+      const avatar = await cloudinary.v2.url(
+        user.avatar.split('upload/').pop(),
+        {
+          height: 80,
+        },
+      )
 
       return {
         avatar,
