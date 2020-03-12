@@ -25,6 +25,7 @@ import {
   ForgetPasswordPage,
   ResetPasswordPage,
   NotFoundPage,
+  MyRecipesPage,
 } from './pages'
 
 const App: React.FC = () => {
@@ -101,6 +102,7 @@ const App: React.FC = () => {
               path="/reset-password/:username/:token"
               component={ResetPasswordPage}
             />
+            <Route path="/my-recipes" component={MyRecipesPage} />
             <Route exact path="/(|recipes)" component={RecipesContainer} />
             <Route path="/recipes/:id" component={RecipeContainer} />
             <Route path="/events">{'события'}</Route>
