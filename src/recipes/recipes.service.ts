@@ -97,8 +97,10 @@ export class RecipesService {
         found = await this.search(this.recipe, search, { author: username })
       }
 
-      if (!found || found.length === 0) {
+      if (!found) {
         throw new NotFoundException(`Nothing found.`)
+      } else if (found.length === 0) {
+        return found
       } else {
         return found
       }
@@ -165,20 +167,22 @@ export class RecipesService {
 
           delete futurePrivate.rating
           futurePrivate.access = RecipeAccessType.USER_ONLY
+          futurePrivate.recipeType = RecipeType.PRIVATE
 
-          const changedPublic = this.privateRecipe.hydrate(futurePrivate)
-          changedPublic.recipeType = RecipeType.PRIVATE
+          const changedPublic = new this.privateRecipe(futurePrivate)
+          await changed.remove()
           return await changedPublic.save()
         }
         case RecipeType.PRIVATE: {
           const futurePublic = changed.toObject()
 
           futurePublic.rating = 0
+          futurePublic.recipeType = RecipeType.PUBLIC
           delete futurePublic.access
           delete futurePublic.url
 
-          const changedPrivate = this.publicRecipe.hydrate(futurePublic)
-          changedPrivate.recipeType = RecipeType.PUBLIC
+          const changedPrivate = new this.publicRecipe(futurePublic)
+          await changed.remove()
           return await changedPrivate.save()
         }
       }
