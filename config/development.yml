@@ -1,0 +1,16 @@
+db:
+  url: 'mongodb+srv://ohhadmin:QzciSsycXy1CpFc7@ohhmode-ofj2w.gcp.mongodb.net/mybeer?retryWrites=true&w=majority'
+
+jwt:
+  secret: 'topSecret123123'
+
+cloud:
+  cloudName: 'dje054gux'
+  apiKey: '136485479187378'
+  apiSecret: 'S9KQQDeuYcbHNqemLA7pAYgzx_k'
+
+smtp:
+  host: 'smtp.mailtrap.io'
+  port: 2525
+  user: '6d7858f1824908'
+  pass: 'dfee715a3b910e'

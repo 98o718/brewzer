@@ -1,0 +1,79 @@
+{
+  "ingredients": {
+    "yeast": {
+      "name": "5S",
+      "weight": 11,
+      "temp": 24
+    },
+    "grains": [
+      {
+        "_id": "5daca3f3fdbfa2bd0933bd9b",
+        "name": "Пэйл Эль Курский",
+        "weight": 5,
+        "color": 2.4
+      },
+      {
+        "_id": "5daca3f3fdbfa2bd0933bd9a",
+        "name": "Кара Кристалл 100",
+        "weight": 0.5,
+        "color": 38
+      }
+    ],
+    "hops": [
+      {
+        "_id": "5daca3f3fdbfa2bd0933bd9e",
+        "name": "Fuggle",
+        "weight": 25,
+        "alpha": 4.4,
+        "time": 15
+      },
+      {
+        "_id": "5daca3f3fdbfa2bd0933bd9d",
+        "name": "Northern Brewer",
+        "weight": 20,
+        "alpha": 10.1,
+        "time": 5
+      },
+      {
+        "_id": "5daca3f3fdbfa2bd0933bd9c",
+        "name": "Tomahawk",
+        "weight": 25,
+        "alpha": 17.4,
+        "time": 90
+      }
+    ]
+  },
+  "rating": 0,
+  "_id": "5daca3f3fdbfa2bd0933bd99",
+  "recipeType": "PUBLIC",
+  "title": "Red Dwarf IPA",
+  "description": "Good red ale",
+  "details": "Father's most lovely recipe",
+  "style": "IPA",
+  "pauses": [
+    {
+      "_id": "5daca3f3fdbfa2bd0933bda2",
+      "name": "63C",
+      "time": 60
+    },
+    {
+      "_id": "5daca3f3fdbfa2bd0933bda1",
+      "name": "70C",
+      "time": 20
+    },
+    {
+      "_id": "5daca3f3fdbfa2bd0933bda0",
+      "name": "72C",
+      "time": 20
+    },
+    {
+      "_id": "5daca3f3fdbfa2bd0933bd9f",
+      "name": "78C",
+      "time": 10
+    }
+  ],
+  "beerType": "Светлое",
+  "volume": 25,
+  "userId": "5dab47f9fea2104c0426d647",
+  "__v": 0
+}
