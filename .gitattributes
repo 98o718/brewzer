@@ -1,0 +1,2 @@
+server/config/development.yml filter=git-crypt diff=git-crypt
+server/config/production.yml filter=git-crypt diff=git-crypt
