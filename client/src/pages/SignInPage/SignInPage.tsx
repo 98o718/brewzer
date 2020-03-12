@@ -8,7 +8,7 @@ import {
 import { Credentials, ErrorTypes } from './types'
 
 import { useAction } from '@reatom/react'
-import { signIn } from '../../actions/auth.actions'
+import { signIn } from '../../model'
 
 import {
   Col,
@@ -42,7 +42,7 @@ const SignInPage: React.FC = () => {
     setCredentials(
       Object.assign({}, credentials, {
         [event.target.name]: event.target.value.trim(),
-      })
+      }),
     )
   }
 

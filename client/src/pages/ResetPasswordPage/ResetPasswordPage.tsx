@@ -22,11 +22,11 @@ import {
 } from 'reactstrap'
 import { BarLoader } from 'react-spinners'
 import { toast } from 'react-toastify'
-import { authAtom } from '../../atoms/auth.atoms'
+import { userAtom } from '../../model'
 
 const ResetPasswordPage = (props: RouteComponentProps<ResetPasswordParams>) => {
   const history = useHistory()
-  const isAuth = useAtom(authAtom)
+  const user = useAtom(userAtom)
 
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState(false)
@@ -62,10 +62,10 @@ const ResetPasswordPage = (props: RouteComponentProps<ResetPasswordParams>) => {
   }, [password, isFirstTime])
 
   useEffect(() => {
-    if (isAuth) {
+    if (user !== null) {
       history.push('/')
     }
-  }, [isAuth, history])
+  }, [user, history])
 
   const handleSubmit = () => {
     setLoading(true)

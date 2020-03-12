@@ -25,16 +25,13 @@ import Avatar from 'react-avatar'
 import constants from '../../constants'
 
 import { useAtom, useAction } from '@reatom/react'
-import { authAtom, usernameAtom, avatarAtom } from '../../atoms/auth.atoms'
-import { logout } from '../../actions/auth.actions'
+import { userAtom, logout } from '../../model'
 import { Cookies } from 'react-cookie'
 import { fetchRefresh } from '../../utils'
 
 const Header: React.FC = () => {
   const [toggle, setToggle] = useState(false)
-  const isAuth = useAtom(authAtom)
-  const username = useAtom(usernameAtom)
-  const avatar = useAtom(avatarAtom)
+  const user = useAtom(userAtom)
   const doLogout = useAction(logout)
 
   const history = useHistory()
@@ -87,25 +84,25 @@ const Header: React.FC = () => {
                 Блог
               </NavLink>
             </NavItem> */}
-            {isAuth ? (
+            {user !== null ? (
               <>
                 <AvatarWrapper>
-                  {avatar.startsWith('http') ? (
+                  {user.avatar.startsWith('http') ? (
                     <Avatar
-                      name={username}
+                      name={user.username}
                       color="lightgrey"
                       style={{ backGround: 'lightgrey' }}
-                      src={avatar}
+                      src={user.avatar}
                       size="40"
                       round
                     />
                   ) : (
-                    <Avatar name={avatar} size="40" round />
+                    <Avatar name={user.avatar} size="40" round />
                   )}
                 </AvatarWrapper>
                 <UncontrolledDropdown nav inNavbar>
                   <DropdownToggle nav caret style={{ color: 'black' }}>
-                    {username}
+                    {user.username}
                   </DropdownToggle>
                   <DropdownMenu right>
                     <DropdownItem tag={Link} to="/my-recipes">

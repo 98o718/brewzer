@@ -20,11 +20,11 @@ import { toast } from 'react-toastify'
 import constants from '../../constants'
 import { useHistory } from 'react-router'
 import { useAtom } from '@reatom/react'
-import { authAtom } from '../../atoms/auth.atoms'
+import { userAtom } from '../../model'
 
 const ResetPasswordPage: React.FC = () => {
   const history = useHistory()
-  const isAuth = useAtom(authAtom)
+  const user = useAtom(userAtom)
 
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState(false)
@@ -49,10 +49,10 @@ const ResetPasswordPage: React.FC = () => {
   }
 
   useEffect(() => {
-    if (isAuth) {
+    if (user !== null) {
       history.push('/')
     }
-  }, [isAuth, history])
+  }, [user, history])
 
   useEffect(() => {
     if (isFirstTime.current) {
