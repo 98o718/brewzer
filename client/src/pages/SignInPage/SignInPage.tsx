@@ -97,8 +97,13 @@ const SignInPage: React.FC = () => {
         return r.json()
       })
       .then(data => {
+        console.log(data)
         setCookie('token', `Bearer ${data.access_token}`, { maxAge: 3600 })
-        doSignIn({ username: credentials.username, avatar: data.avatar })
+        doSignIn({
+          username: credentials.username,
+          avatar: data.avatar,
+          sub: data.sub,
+        })
         toast.success('Успешный вход!')
         setTimeout(() => {
           history.push('/')
