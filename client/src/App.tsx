@@ -26,11 +26,12 @@ import {
   ResetPasswordPage,
   NotFoundPage,
   MyRecipesPage,
+  AddRecipePage,
 } from './pages'
 
 const App: React.FC = () => {
   const store = createStore(
-    JSON.parse(`${localStorage.getItem('app_store')}`) || {}
+    JSON.parse(`${localStorage.getItem('app_store')}`) || {},
   )
 
   // eslint-disable-next-line
@@ -38,7 +39,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     return store.subscribe(() =>
-      localStorage.setItem('app_store', JSON.stringify(store.getState()))
+      localStorage.setItem('app_store', JSON.stringify(store.getState())),
     )
   })
 
@@ -103,6 +104,7 @@ const App: React.FC = () => {
               component={ResetPasswordPage}
             />
             <Route path="/my-recipes" component={MyRecipesPage} />
+            <Route path="/add-recipe" component={AddRecipePage} />
             <Route exact path="/(|recipes)" component={RecipesContainer} />
             <Route path="/recipes/:id" component={RecipeContainer} />
             <Route path="/events">{'события'}</Route>
