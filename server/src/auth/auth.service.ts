@@ -51,12 +51,14 @@ export class AuthService {
 
       return {
         avatar,
+        sub: user.id,
         access_token: this.jwtService.sign(payload),
       }
     }
 
     return {
       avatar: user.avatar,
+      sub: user.id,
       access_token: this.jwtService.sign(payload),
     }
   }
