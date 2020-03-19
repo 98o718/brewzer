@@ -35,6 +35,7 @@ export const RecipeSchema = new mongoose.Schema(
     style: String,
     pauses: [
       {
+        temp: Number,
         name: String,
         time: Number,
       },

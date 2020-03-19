@@ -98,8 +98,14 @@ class Ingredients {
 }
 
 class Pause {
-  @IsNotEmpty()
+  @ApiModelProperty({
+    required: false,
+  })
+  @IsOptional()
   name: string
+
+  @IsNotEmpty()
+  temp: number
 
   @IsNotEmpty()
   time: number

@@ -22,7 +22,8 @@ interface Yeast {
 }
 
 interface Pause {
-  name: string
+  name?: string
+  temp: number
   time: number
 }
 
@@ -39,6 +40,10 @@ export interface Recipe extends Document {
   readonly pauses: Pause[]
   readonly beerType?: string
   readonly volume: number
+  readonly abv: number
+  readonly ibu: number
+  readonly og: number
+  readonly fg: number
   recipeType: string
   readonly userId: string
   rating?: number
