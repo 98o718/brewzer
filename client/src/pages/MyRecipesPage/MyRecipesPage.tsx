@@ -1,25 +1,32 @@
 import React, { useEffect, useState } from 'react'
 import { MyRecipesPageWrapper } from './MyRecipesPage.styles'
-import { RecipesList } from '../../components'
+import { RecipesList, MyRecipesPanel } from '../../components'
 import constants from '../../constants'
 import { useAtom } from '@reatom/react'
-import { usernameAtom } from '../../atoms/auth.atoms'
+import { userAtom } from '../../model'
 import { fetchRefresh } from '../../utils'
 import { RecipeDescription } from '../../types'
+import { useHistory } from 'react-router-dom'
 
 const MyRecipesPage: React.FC = () => {
-  const username = useAtom(usernameAtom)
+  const history = useHistory()
+  const user = useAtom(userAtom)
   const [recipes, setRecipes] = useState<RecipeDescription[] | null>(null)
 
   useEffect(() => {
-    fetchRefresh(constants.USERS_RECIPES_URL + username).then(res => {
-      console.log(res.data)
-      setRecipes(res.data)
-    })
-  }, [username])
+    if (user === null) {
+      history.push('/')
+    } else {
+      fetchRefresh(constants.USERS_RECIPES_URL + user.username).then(res => {
+        console.log(res.data)
+        setRecipes(res.data)
+      })
+    }
+  }, [user])
 
   return (
     <MyRecipesPageWrapper>
+      <MyRecipesPanel />
       {recipes !== null &&
         (recipes.length === 0 ? (
           'У вас нет рецептов'
