@@ -30,3 +30,13 @@ export const Lock = styled.span`
   width: fit-content;
   cursor: pointer;
 `
+
+export const RecipeInfoWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+export const RecipeRightPanel = styled.div`
+  margin-left: 30px;
+  align-self: center;
+`
