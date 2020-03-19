@@ -5,6 +5,9 @@
   "dependencies": {
     "@emotion/core": "^10.0.20",
     "@emotion/styled": "^10.0.17",
+    "@fortawesome/fontawesome-svg-core": "^1.2.27",
+    "@fortawesome/free-solid-svg-icons": "^5.12.1",
+    "@fortawesome/react-fontawesome": "^0.1.9",
     "@reatom/core": "^1.1.0",
     "@reatom/debug": "^1.1.1",
     "@reatom/react": "^1.0.0",
@@ -17,6 +20,7 @@
     "bootstrap": "^4.3.1",
     "emotion-normalize": "^10.1.0",
     "react": "^16.10.2",
+    "react-autosize-textarea": "^7.0.0",
     "react-avatar": "https://github.com/98o718/react-avatar.git",
     "react-cookie": "^4.0.3",
     "react-device-detect": "^1.9.10",
