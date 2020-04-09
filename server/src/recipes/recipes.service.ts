@@ -78,7 +78,6 @@ export class RecipesService {
     createRecipeDto: CreateRecipeDto,
     user: UserInfo,
   ): Promise<Recipe> {
-    console.log('copy')
     switch (createRecipeDto.recipeType) {
       case RecipeType.PUBLIC: {
         const createdRecipe = new this.publicRecipe({

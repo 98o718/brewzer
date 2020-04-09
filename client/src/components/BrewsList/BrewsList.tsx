@@ -55,8 +55,6 @@ const BrewsList = ({
 
             percent = percent >= 100 ? 100 : percent <= 0 ? 0 : percent
 
-            console.log(brew)
-
             return (
               <ListGroupItem
                 tag={BrewItem}

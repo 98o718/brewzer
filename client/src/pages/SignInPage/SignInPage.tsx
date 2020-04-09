@@ -90,13 +90,12 @@ const SignInPage: React.FC = () => {
       },
       body: JSON.stringify(credentials),
     })
-      .then(r => {
+      .then((r) => {
         if (!r.ok)
           throw new Error('Ошибка входа или логин/пароль неправильный.')
         return r.json()
       })
-      .then(data => {
-        console.log(data)
+      .then((data) => {
         setCookie('token', `Bearer ${data.access_token}`, {
           maxAge: 3600,
           path: '/',
@@ -109,7 +108,7 @@ const SignInPage: React.FC = () => {
         toast.success('Успешный вход!')
         history.push('/')
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error)
         toast.error(error.message)
         setLoading(false)

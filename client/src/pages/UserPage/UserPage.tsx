@@ -17,6 +17,7 @@ const UserPage = ({ match }: RouteComponentProps<UserPageProps>) => {
 
   return (
     <RecipesList
+      width="500px"
       heading={`Рецепты ${match.params.username}`}
       recipes={recipes}
       showRating

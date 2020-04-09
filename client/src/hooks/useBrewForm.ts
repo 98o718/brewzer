@@ -84,7 +84,7 @@ export const useBrewForm = ({ id, volume, edit = false }: useBrewFormProps) => {
 
     setSending(true)
 
-    const { ok, data } = await fetchRefresh(
+    const { ok } = await fetchRefresh(
       edit
         ? `${process.env.REACT_APP_BREWS_URL}/${id}`
         : process.env.REACT_APP_BREWS_URL!,
@@ -102,7 +102,6 @@ export const useBrewForm = ({ id, volume, edit = false }: useBrewFormProps) => {
       history.push('/my-brews')
     } else {
       toast.error('Ошибка добавления!')
-      console.log(data)
       setLoading(false)
     }
   }
