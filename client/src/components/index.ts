@@ -1,23 +1,29 @@
 /*APPEND COMPONENT IMPORT HERE*/
+import NoPrint from './NoPrint'
+import RecipePanel from './RecipePanel'
+import Recipe from './Recipe'
+import RecipeForm from './RecipeForm'
+import BrewForm from './BrewForm'
+import BrewsList from './BrewsList'
 import MyRecipesPanel from './MyRecipesPanel'
-import RecipeInfo from './RecipeInfo'
-import RecipeChart from './RecipeChart'
-import RecipeContainer from './RecipeContainer'
 import RecipesList from './RecipesList'
-import RecipesContainer from './RecipesContainer'
 import Header from './Header'
 import BeerWave from './BeerWave'
+import PrivateRoute from './PrivateRoute'
 import Layout from './Layout'
 
 export {
   /*APPEND COMPONENT EXPORT HERE*/
+  NoPrint,
+  RecipePanel,
+  Recipe,
+  RecipeForm,
+  BrewForm,
+  BrewsList,
   MyRecipesPanel,
-  RecipeInfo,
-  RecipeChart,
-  RecipeContainer,
   RecipesList,
-  RecipesContainer,
   Header,
   BeerWave,
+  PrivateRoute,
   Layout,
 }

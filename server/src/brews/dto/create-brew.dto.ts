@@ -5,6 +5,7 @@ import {
   IsNumber,
   IsDate,
   IsDateString,
+  ValidateIf,
 } from 'class-validator'
 import { ApiModelProperty } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
@@ -13,7 +14,12 @@ export class CreateBrewDto {
   @ApiModelProperty()
   @IsNotEmpty()
   @IsString()
-  recipeId: string
+  recipe: string
+
+  @ApiModelProperty()
+  @IsNotEmpty()
+  @IsString()
+  title: string
 
   @ApiModelProperty()
   @IsOptional()
@@ -21,11 +27,19 @@ export class CreateBrewDto {
   comment?: string
 
   @ApiModelProperty()
+  @ValidateIf(o => o.volume !== '')
+  @IsOptional()
+  @IsNumber()
+  volume?: number
+
+  @ApiModelProperty()
+  @ValidateIf(o => o.og !== '')
   @IsOptional()
   @IsNumber()
   og?: number
 
   @ApiModelProperty()
+  @ValidateIf(o => o.fg !== '')
   @IsOptional()
   @IsNumber()
   fg?: number

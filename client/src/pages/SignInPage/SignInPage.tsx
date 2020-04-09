@@ -22,7 +22,6 @@ import {
 } from 'reactstrap'
 import { BarLoader } from 'react-spinners'
 import { toast } from 'react-toastify'
-import constants from '../../constants'
 import { useHistory } from 'react-router'
 import { useCookies } from 'react-cookie'
 
@@ -84,7 +83,7 @@ const SignInPage: React.FC = () => {
       return
     }
 
-    fetch(constants.SIGNIN_URL, {
+    fetch(process.env.REACT_APP_SIGNIN_URL!, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -98,16 +97,17 @@ const SignInPage: React.FC = () => {
       })
       .then(data => {
         console.log(data)
-        setCookie('token', `Bearer ${data.access_token}`, { maxAge: 3600 })
+        setCookie('token', `Bearer ${data.access_token}`, {
+          maxAge: 3600,
+          path: '/',
+        })
         doSignIn({
           username: credentials.username,
           avatar: data.avatar,
           sub: data.sub,
         })
         toast.success('Успешный вход!')
-        setTimeout(() => {
-          history.push('/')
-        }, 1500)
+        history.push('/')
       })
       .catch(error => {
         console.error(error)

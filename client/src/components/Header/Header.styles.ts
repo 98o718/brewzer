@@ -28,3 +28,15 @@ export const AvatarWrapper = styled.div`
     display: none;
   }
 `
+
+export const OfflineIndicator = styled.span`
+  color: #dc3445;
+  font-size: 1rem;
+  background: RGB(220, 52, 69);
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  border-radius: 50%;
+  margin-left: 15px;
+  box-shadow: 0 0 60px 30px #fff, 0 0 15px 3px #dc3445;
+`

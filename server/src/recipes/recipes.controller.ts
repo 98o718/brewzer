@@ -21,7 +21,9 @@ import { GetUser } from '../auth/get-user.decorator'
 import { UserInfo } from '../users/interfaces/user-info.interface'
 import { AuthInterceptor } from '../auth/auth.interceptor'
 import { RefreshTokenInterceptor } from '../auth/refresh-token.interceptor'
+import { RateRecipeDto } from './dto/rate-recipe.dto'
 
+@UseInterceptors(RefreshTokenInterceptor)
 @Controller('recipes')
 @ApiUseTags('Recipes')
 export class RecipesController {
@@ -39,6 +41,18 @@ export class RecipesController {
     return this.recipesService.create(createRecipeDto, user)
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @Post('/copy')
+  @ApiOperation({ title: 'Copy recipe' })
+  async copy(
+    @Body(ValidationPipe)
+    createRecipeDto: CreateRecipeDto,
+    @GetUser() user: UserInfo,
+  ): Promise<Recipe> {
+    return this.recipesService.copy(createRecipeDto, user)
+  }
+
   @UseInterceptors(AuthInterceptor)
   @ApiBearerAuth()
   @Get()
@@ -50,8 +64,19 @@ export class RecipesController {
     return await this.recipesService.findAll(findRecipeDto, user)
   }
 
+  @Get('/popular')
+  @ApiOperation({ title: 'Get popular recipes' })
+  async findPopular(): Promise<Recipe[]> {
+    return await this.recipesService.findPopular()
+  }
+
+  @Get('/new')
+  @ApiOperation({ title: 'Get new recipes' })
+  async findNew(): Promise<Recipe[]> {
+    return await this.recipesService.findNew()
+  }
+
   @UseInterceptors(AuthInterceptor)
-  @UseInterceptors(RefreshTokenInterceptor)
   @ApiBearerAuth()
   @Get('user/:username')
   @ApiOperation({ title: "Get all user's recipes" })
@@ -86,18 +111,7 @@ export class RecipesController {
 
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
-  @Patch('change-type/:id')
-  @ApiOperation({ title: 'Change recipe type' })
-  async changeType(
-    @Param('id') id: string,
-    @GetUser() user: UserInfo,
-  ): Promise<Recipe> {
-    return await this.recipesService.changeType(id, user)
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @ApiBearerAuth()
-  @Patch('edit/:id')
+  @Patch(':id')
   @ApiOperation({ title: 'Edit recipe' })
   async edit(
     @Param('id') id: string,
@@ -109,7 +123,19 @@ export class RecipesController {
 
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
-  @Delete('/:id')
+  @Patch('/rate/:id')
+  @ApiOperation({ title: 'Rate recipe' })
+  async rate(
+    @Param('id') id: string,
+    @GetUser() user: UserInfo,
+    @Body(ValidationPipe) rateRecipeDto: RateRecipeDto,
+  ): Promise<Recipe> {
+    return await this.recipesService.rate(id, user, rateRecipeDto)
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @Delete(':id')
   @ApiOperation({ title: 'Delete recipe by ID' })
   async delete(
     @Param('id') id: string,

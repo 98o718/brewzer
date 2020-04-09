@@ -26,6 +26,22 @@ export const RecipeSchema = new mongoose.Schema(
           time: Number,
         },
       ],
+      dryHops: [
+        {
+          name: String,
+          weight: Number,
+          when: String,
+          time: Number,
+        },
+      ],
+      others: [
+        {
+          name: String,
+          weight: Number,
+          when: String,
+          time: Number,
+        },
+      ],
       yeast: {
         name: String,
         weight: Number,
@@ -42,14 +58,21 @@ export const RecipeSchema = new mongoose.Schema(
     ],
     beerType: String,
     volume: Number,
+    batchVolume: Number,
+    mashWater: Number,
+    flushingWater: Number,
     abv: Number,
     ibu: Number,
     og: Number,
     fg: Number,
     userId: mongoose.Schema.Types.ObjectId,
     author: String,
+    forked: String,
   },
-  { discriminatorKey: 'recipeType' },
+  {
+    discriminatorKey: 'recipeType',
+    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+  },
 )
 
 RecipeSchema.set('toJSON', {
@@ -61,6 +84,14 @@ const PublicRecipeSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  votes: {
+    type: [Number],
+    default: [0, 0, 0, 0, 0],
+  },
+  voted: {
+    type: [String],
+    default: [],
+  },
 })
 
 const PrivateRecipeSchema = new mongoose.Schema({
@@ -68,10 +99,6 @@ const PrivateRecipeSchema = new mongoose.Schema({
     type: String,
   },
   url: String,
-})
-
-PrivateRecipeSchema.pre('save', function(this: Recipe) {
-  if (this.access === RecipeAccessType.URL) this.url = uuid()
 })
 
 export function publicRecipeDescriminator(recipe) {

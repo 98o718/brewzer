@@ -12,6 +12,8 @@ import { RecipeType } from './recipe-type.enum'
 import { UserInfo } from '../users/interfaces/user-info.interface'
 import { UsersService } from '../users/users.service'
 import { RecipeAccessType } from './recipe-access-type.enum'
+import { RateRecipeDto } from './dto/rate-recipe.dto'
+import uuidv4 from 'uuidv4'
 
 @Injectable()
 export class RecipesService {
@@ -34,9 +36,15 @@ export class RecipesService {
     if (searchString) {
       return await model
         .find({ title: { $regex: searchString, $options: 'i' }, ...params })
+        .sort('-created_at')
+        .select('-voted')
         .exec()
     } else {
-      return await model.find({ ...params }).exec()
+      return await model
+        .find({ ...params })
+        .sort('-created_at')
+        .select('-voted')
+        .exec()
     }
   }
 
@@ -44,7 +52,7 @@ export class RecipesService {
     createRecipeDto: CreateRecipeDto,
     user: UserInfo,
   ): Promise<Recipe> {
-    switch (createRecipeDto.type) {
+    switch (createRecipeDto.recipeType) {
       case RecipeType.PUBLIC: {
         const createdRecipe = new this.publicRecipe({
           ...createRecipeDto,
@@ -58,6 +66,35 @@ export class RecipesService {
           ...createRecipeDto,
           userId: user.userId,
           author: user.username,
+          url:
+            createRecipeDto.access === RecipeAccessType.URL ? uuidv4() : null,
+        })
+        return await createdRecipe.save()
+      }
+    }
+  }
+
+  async copy(
+    createRecipeDto: CreateRecipeDto,
+    user: UserInfo,
+  ): Promise<Recipe> {
+    console.log('copy')
+    switch (createRecipeDto.recipeType) {
+      case RecipeType.PUBLIC: {
+        const createdRecipe = new this.publicRecipe({
+          ...createRecipeDto,
+          userId: user.userId,
+          author: user.username,
+          forked: createRecipeDto.author,
+        })
+        return await createdRecipe.save()
+      }
+      case RecipeType.PRIVATE: {
+        const createdRecipe = new this.privateRecipe({
+          ...createRecipeDto,
+          userId: user.userId,
+          author: user.username,
+          forked: createRecipeDto.author,
         })
         return await createdRecipe.save()
       }
@@ -109,12 +146,56 @@ export class RecipesService {
     }
   }
 
-  async findById(id: string, user: UserInfo | null): Promise<Recipe> {
+  async findPopular() {
+    try {
+      const popular = await this.publicRecipe
+        .find({
+          rating: {
+            $gt: 0,
+          },
+        })
+        .sort({ rating: -1 })
+        .limit(10)
+
+      if (!popular) throw new Error()
+
+      return popular
+    } catch (error) {
+      throw new NotFoundException(`Nothing found.`)
+    }
+  }
+
+  async findNew() {
+    try {
+      const newRecipes = await this.publicRecipe
+        .find()
+        .sort('-created_at')
+        .select('-voted')
+        .limit(10)
+
+      if (!newRecipes) throw new Error()
+
+      return newRecipes
+    } catch (error) {
+      throw new NotFoundException(`Nothing found.`)
+    }
+  }
+
+  async findById(id: string, user: UserInfo | null) {
     try {
       const publicFound = await this.publicRecipe.findById(id).exec()
 
       if (publicFound) {
-        return publicFound
+        let canVote =
+          user === null ? false : !publicFound.voted.includes(user.userId)
+
+        let recipe = publicFound.toObject()
+
+        recipe.canVote = canVote
+
+        delete recipe.voted
+
+        return recipe
       } else if (user) {
         const privateFound = await this.privateRecipe
           .findOne({
@@ -134,9 +215,51 @@ export class RecipesService {
     }
   }
 
+  async rate(
+    id: string,
+    user: UserInfo | null,
+    { vote }: RateRecipeDto,
+  ): Promise<Recipe> {
+    try {
+      const recipe = await this.publicRecipe
+        .findOne({ _id: id, voted: { $ne: user.userId } })
+        .exec()
+
+      if (recipe) {
+        let votes = recipe.votes.slice()
+        votes[vote] += 1
+        recipe.votes = votes
+
+        let total_rate = 0
+        let total_voters = 0
+
+        recipe.votes.forEach((qty, idx) => {
+          total_rate += (idx + 1) * qty
+          total_voters += qty
+        })
+
+        recipe.voted = recipe.voted.concat([user.userId])
+
+        recipe.rating = +(total_rate / total_voters).toFixed(2)
+
+        return await recipe.save()
+      }
+
+      throw new NotFoundException(
+        `Rate recipe with id: "${id}" is not posssible.`,
+      )
+    } catch (error) {
+      throw new NotFoundException(
+        `Rate recipe with id: "${id}" is not posssible.`,
+      )
+    }
+  }
+
   async findByUrl(url: string): Promise<Recipe> {
     try {
-      const found = await this.privateRecipe.findOne({ url }).exec()
+      const found = await this.privateRecipe
+        .findOne({ url, access: RecipeAccessType.URL })
+        .exec()
 
       if (!found) {
         throw new NotFoundException(`Recipe with url: "${url}" not found.`)
@@ -148,72 +271,57 @@ export class RecipesService {
     }
   }
 
-  async changeType(id: string, user: UserInfo): Promise<Recipe> {
-    try {
-      const changed = await this.recipe.findOne({
-        _id: id,
-        userId: user.userId,
-      })
-
-      if (!changed) {
-        throw new NotFoundException(
-          `Recipe with id: "${id}" not found or you haven't permission to change type of them.`,
-        )
-      }
-
-      switch (changed.recipeType) {
-        case RecipeType.PUBLIC: {
-          const futurePrivate = changed.toObject()
-
-          delete futurePrivate.rating
-          futurePrivate.access = RecipeAccessType.USER_ONLY
-          futurePrivate.recipeType = RecipeType.PRIVATE
-
-          const changedPublic = new this.privateRecipe(futurePrivate)
-          await changed.remove()
-          return await changedPublic.save()
-        }
-        case RecipeType.PRIVATE: {
-          const futurePublic = changed.toObject()
-
-          futurePublic.rating = 0
-          futurePublic.recipeType = RecipeType.PUBLIC
-          delete futurePublic.access
-          delete futurePublic.url
-
-          const changedPrivate = new this.publicRecipe(futurePublic)
-          await changed.remove()
-          return await changedPrivate.save()
-        }
-      }
-    } catch (error) {
-      throw new NotFoundException(
-        `Recipe with id: "${id}" not found or you haven't permission to change type of them.`,
-      )
-    }
-  }
-
   async edit(
     id: string,
     user: UserInfo,
     editRecipeDto: CreateRecipeDto,
   ): Promise<Recipe> {
     try {
-      const editable = await this.recipe.findOneAndUpdate(
-        {
-          _id: id,
-          userId: user.userId,
-        },
-        { ...editRecipeDto },
-      )
+      const editable = await this.recipe.findOne({
+        _id: id,
+        userId: user.userId,
+      })
 
       if (!editable) {
         throw new NotFoundException(
           `Recipe with id: "${id}" not found or you haven't permission to edit them.`,
         )
-      }
+      } else if (editable.recipeType === editRecipeDto.recipeType) {
+        if (editRecipeDto.access === RecipeAccessType.URL && !editable.url) {
+          return editable.updateOne({ ...editRecipeDto, url: uuidv4() })
+        }
+        return editable.updateOne(editRecipeDto)
+      } else {
+        switch (editable.recipeType) {
+          case RecipeType.PUBLIC: {
+            const futurePrivate = { ...editable.toObject(), ...editRecipeDto }
 
-      return editable
+            delete futurePrivate.rating
+            delete futurePrivate.voted
+            delete futurePrivate.votes
+
+            if (editRecipeDto.access === RecipeAccessType.URL) {
+              futurePrivate.url = uuidv4()
+            }
+
+            const changedPublic = new this.privateRecipe(futurePrivate)
+            await editable.remove()
+            return await changedPublic.save()
+          }
+          case RecipeType.PRIVATE: {
+            const futurePublic = { ...editable.toObject(), ...editRecipeDto }
+
+            futurePublic.rating = 0
+
+            delete futurePublic.access
+            delete futurePublic.url
+
+            const changedPrivate = new this.publicRecipe(futurePublic)
+            await editable.remove()
+            return await changedPrivate.save()
+          }
+        }
+      }
     } catch (error) {
       throw new NotFoundException(
         `Recipe with id: "${id}" not found or you haven't permission to edit them.`,

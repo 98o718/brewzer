@@ -8,6 +8,7 @@ import {
   Param,
   Delete,
   Patch,
+  UseInterceptors,
 } from '@nestjs/common'
 import { BrewsService } from './brews.service'
 import { AuthGuard } from '@nestjs/passport'
@@ -16,6 +17,7 @@ import { GetUser } from '../auth/get-user.decorator'
 import { UserInfo } from '../users/interfaces/user-info.interface'
 import { CreateBrewDto } from './dto/create-brew.dto'
 import { Brew } from './interfaces/brew.interface'
+import { RefreshTokenInterceptor } from 'src/auth/refresh-token.interceptor'
 
 @Controller('brews')
 @ApiUseTags('Brews')
@@ -23,6 +25,7 @@ export class BrewsController {
   constructor(private readonly brewsService: BrewsService) {}
 
   @UseGuards(AuthGuard('jwt'))
+  @UseInterceptors(RefreshTokenInterceptor)
   @ApiBearerAuth()
   @Post()
   @ApiOperation({ title: 'Create brew' })
@@ -34,6 +37,7 @@ export class BrewsController {
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @UseInterceptors(RefreshTokenInterceptor)
   @ApiBearerAuth()
   @Get()
   @ApiOperation({ title: "Get all user's brews" })
@@ -65,6 +69,7 @@ export class BrewsController {
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @UseInterceptors(RefreshTokenInterceptor)
   @ApiBearerAuth()
   @Delete(':id')
   @ApiOperation({ title: 'Delete brew by id' })

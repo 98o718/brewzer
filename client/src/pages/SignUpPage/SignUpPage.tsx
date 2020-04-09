@@ -6,7 +6,6 @@ import {
   ButtonInner,
 } from './SignUpPage.styles'
 import { UserType, ErrorTypes } from './types'
-import constants from '../../constants'
 
 import {
   Col,
@@ -54,13 +53,13 @@ const SignUpPage: React.FC = () => {
     setUser(
       Object.assign({}, user, {
         [event.target.name]: event.target.value.trim(),
-      })
+      }),
     )
   }
 
   const handleCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUser(
-      Object.assign({}, user, { [event.target.name]: event.target.checked })
+      Object.assign({}, user, { [event.target.name]: event.target.checked }),
     )
   }
 
@@ -122,7 +121,7 @@ const SignUpPage: React.FC = () => {
     formData.append('password', password)
     avatar && formData.append('avatar', avatar[0])
 
-    fetch(constants.SIGNUP_URL, {
+    fetch(process.env.REACT_APP_SIGNUP_URL!, {
       method: 'POST',
       body: formData,
     })

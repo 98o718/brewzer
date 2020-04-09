@@ -9,6 +9,9 @@ const MyRecipesPanel: React.FC = () => {
       <Button tag={Link} to="/add-recipe" color="primary">
         Добавить рецепт
       </Button>
+      {/* <Button tag={Link} to="/add-recipe" color="danger">
+        Удалить все
+      </Button> */}
     </MyRecipesPanelWrapper>
   )
 }

@@ -6,7 +6,6 @@ import {
 } from './ResetPasswordPage.styles'
 import { RouteComponentProps, useHistory } from 'react-router-dom'
 import { ResetPasswordParams } from './types'
-import constants from '../../constants'
 
 import { useAtom } from '@reatom/react'
 
@@ -79,7 +78,7 @@ const ResetPasswordPage = (props: RouteComponentProps<ResetPasswordParams>) => {
       return
     }
 
-    fetch(constants.RESET_PASSWORD_URL, {
+    fetch(process.env.REACT_APP_RESET_PASSWORD_URL!, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -1,22 +1,14 @@
 import styled from '@emotion/styled'
 
 type RecipesListWrapperProps = {
-  type: string | undefined
+  type?: string
 }
 
 export const RecipesListWrapper = styled.div<RecipesListWrapperProps>`
   display: flex;
   flex-direction: column;
-  /* width: ${props => (props.type ? '100%' : '40%')}; */
   width: 100%;
-  min-width: 270px;
-  /* max-width: 550px; */
-  margin-right: ${props => (props.type ? '0' : '30px')};
   margin-bottom: 30px;
-
-  &:last-child {
-    margin-right: 0;
-  }
 `
 
 export const Recipe = styled.div`
@@ -39,4 +31,39 @@ export const RecipeInfoWrapper = styled.div`
 export const RecipeRightPanel = styled.div`
   margin-left: 30px;
   align-self: center;
+  display: flex;
+  align-items: center;
+`
+
+export const ButtonsWrapper = styled.div`
+  margin-left: 15px;
+  display: flex;
+  align-items: center;
+`
+
+type IconButtonProps = {
+  color?: string
+}
+
+export const IconButton = styled.button<IconButtonProps>`
+  border: none;
+  background: transparent;
+  margin-left: 10px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: 0.2s;
+  color: lightgray;
+
+  &:focus,
+  &:hover {
+    outline: none;
+    transform: scale(1.1);
+    color: ${(props) => (props.color ? props.color : 'black')};
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
 `
