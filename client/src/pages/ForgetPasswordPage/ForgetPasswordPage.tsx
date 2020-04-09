@@ -17,7 +17,6 @@ import {
 } from 'reactstrap'
 import { BarLoader } from 'react-spinners'
 import { toast } from 'react-toastify'
-import constants from '../../constants'
 import { useHistory } from 'react-router'
 import { useAtom } from '@reatom/react'
 import { userAtom } from '../../model'
@@ -74,7 +73,7 @@ const ResetPasswordPage: React.FC = () => {
       return
     }
 
-    fetch(constants.FORGET_PASSWORD_URL, {
+    fetch(process.env.REACT_APP_FORGET_PASSWORD_URL!, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

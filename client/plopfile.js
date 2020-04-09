@@ -1,4 +1,4 @@
-module.exports = plop => {
+module.exports = (plop) => {
   plop.setGenerator('c', {
     description: 'Create a component',
     // User input prompts provided as arguments to the template
@@ -68,6 +68,50 @@ module.exports = plop => {
       },
     ],
   })
+
+  plop.setGenerator('h', {
+    description: 'Create a hook',
+    // User input prompts provided as arguments to the template
+    prompts: [
+      {
+        // Raw text input
+        type: 'input',
+        // Variable name for this input
+        name: 'name',
+        // Prompt to display on command line
+        message: 'What is your hook name?',
+      },
+    ],
+    actions: [
+      {
+        // Add a new file
+        type: 'add',
+        // Path for the new file
+        path: 'src/hooks/use{{pascalCase name}}.ts',
+        // Handlebars template used to generate content of new file
+        templateFile: 'plop-templates/Hook.ts.hbs',
+      },
+      {
+        // Add a new file
+        type: 'append',
+        // Path for the new file
+        path: 'src/hooks/index.ts',
+        pattern: '/*APPEND HOOK EXPORT HERE*/',
+        // Handlebars template used to generate content of new file
+        templateFile: 'plop-templates/appendHookExport.hbs',
+        abortOnFail: false,
+      },
+      {
+        // Add a new file
+        type: 'add',
+        // Path for the new file
+        path: 'src/hooks/index.ts',
+        // Handlebars template used to generate content of new file
+        templateFile: 'plop-templates/indexHooks.ts.hbs',
+      },
+    ],
+  })
+
   plop.setGenerator('p', {
     description: 'Create a page',
     // User input prompts provided as arguments to the template

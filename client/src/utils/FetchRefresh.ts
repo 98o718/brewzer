@@ -23,11 +23,18 @@ export const fetchRefresh = async (
 
   const request = await fetch(input, init)
   const ok = request.ok
-  const data = await request.json()
+  const json = await request.json()
 
-  if (data.newToken) {
-    cookies.set('token', `Bearer ${data.newToken}`)
+  if (!ok) {
+    console.error('[FetchRefresh] - got error', json)
+  } else {
+    console.log('[FetchRefresh] - fetched data', json)
   }
 
-  return { ok, data }
+  if (json.newToken) {
+    cookies.set('token', `Bearer ${json.newToken}`, { maxAge: 3600, path: '/' })
+    return { ok, data: json.data }
+  }
+
+  return { ok, data: json }
 }

@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module'
 import { UsersModule } from './users/users.module'
 import { BrewsModule } from './brews/brews.module'
 import { FilesModule } from './files/files.module'
+import { JwtModule } from './jwt/jwt.module'
 
 import * as config from 'config'
 
@@ -36,7 +37,7 @@ const smtpConfig = config.get('smtp')
       },
       template: {
         dir: 'templates',
-        adapter: new PugAdapter(), // or new PugAdapter()
+        adapter: new PugAdapter(),
         options: {
           strict: true,
         },
@@ -47,6 +48,7 @@ const smtpConfig = config.get('smtp')
     UsersModule,
     BrewsModule,
     FilesModule,
+    JwtModule,
   ],
   controllers: [],
   providers: [AppService],

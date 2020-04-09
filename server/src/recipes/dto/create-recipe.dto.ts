@@ -53,6 +53,42 @@ class Hop {
   time: number
 }
 
+class DryHop {
+  @ApiModelProperty()
+  @IsNotEmpty()
+  name: string
+
+  @ApiModelProperty()
+  @IsNotEmpty()
+  weight: number
+
+  @ApiModelProperty()
+  @IsNotEmpty()
+  when: string
+
+  @ApiModelProperty()
+  @IsOptional()
+  time: number
+}
+
+class Other {
+  @ApiModelProperty()
+  @IsNotEmpty()
+  name: string
+
+  @ApiModelProperty()
+  @IsNotEmpty()
+  weight: number
+
+  @ApiModelProperty()
+  @IsNotEmpty()
+  when: string
+
+  @ApiModelProperty()
+  @IsOptional()
+  time: number
+}
+
 class Yeast {
   @ApiModelProperty()
   @IsNotEmpty()
@@ -89,6 +125,24 @@ class Ingredients {
   @ValidateNested()
   @Type(() => Hop)
   hops: Hop[]
+
+  @ApiModelProperty({
+    isArray: true,
+    type: DryHop,
+  })
+  @IsArray()
+  @ValidateNested()
+  @Type(() => DryHop)
+  dryHops: DryHop[]
+
+  @ApiModelProperty({
+    isArray: true,
+    type: Other,
+  })
+  @IsArray()
+  @ValidateNested()
+  @Type(() => Other)
+  others: Other[]
 
   @ApiModelProperty()
   @IsNotEmpty()
@@ -155,9 +209,27 @@ export class CreateRecipeDto {
   @IsOptional()
   beerType: string
 
+  @ApiModelProperty({
+    required: false,
+  })
+  @IsOptional()
+  author: string
+
+  @ApiModelProperty()
+  @IsNotEmpty()
+  mashWater: number
+
+  @ApiModelProperty()
+  @IsNotEmpty()
+  flushingWater: number
+
   @ApiModelProperty()
   @IsNotEmpty()
   volume: number
+
+  @ApiModelProperty()
+  @IsOptional()
+  batchVolume: number
 
   @ApiModelProperty({
     required: false,
@@ -186,7 +258,7 @@ export class CreateRecipeDto {
   @ApiModelProperty()
   @IsNotEmpty()
   @IsEnum(RecipeType)
-  type: RecipeType
+  recipeType: RecipeType
 
   @ApiModelProperty()
   @ValidateIf(o => o.type === RecipeType.PRIVATE)

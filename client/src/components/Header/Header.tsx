@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { HeaderWrapper, HeaderButton, AvatarWrapper } from './Header.styles'
+import {
+  HeaderWrapper,
+  HeaderButton,
+  AvatarWrapper,
+  OfflineIndicator,
+} from './Header.styles'
 
 import {
   Collapse,
@@ -13,26 +18,22 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  // UncontrolledDropdown,
-  // DropdownToggle,
-  // DropdownMenu,
-  // DropdownItem,
-  // Button,
 } from 'reactstrap'
 import { Link, useHistory } from 'react-router-dom'
 import Avatar from 'react-avatar'
-
-import constants from '../../constants'
 
 import { useAtom, useAction } from '@reatom/react'
 import { userAtom, logout } from '../../model'
 import { Cookies } from 'react-cookie'
 import { fetchRefresh } from '../../utils'
+import { useOnlineDetector } from '../../hooks'
 
 const Header: React.FC = () => {
   const [toggle, setToggle] = useState(false)
   const user = useAtom(userAtom)
   const doLogout = useAction(logout)
+
+  const { isOnline } = useOnlineDetector()
 
   const history = useHistory()
 
@@ -43,12 +44,14 @@ const Header: React.FC = () => {
       if (!token) doLogout()
     })
 
-    fetchRefresh(constants.VERIFY_AUTH_URL).then(r => {
-      if (!r.ok) {
-        doLogout()
-      }
-    })
-  }, [history, doLogout])
+    if (isOnline) {
+      fetchRefresh(process.env.REACT_APP_VERIFY_AUTH_URL!).then((r) => {
+        if (!r.ok) {
+          doLogout()
+        }
+      })
+    }
+  }, [history, doLogout, isOnline])
 
   return (
     <HeaderWrapper>
@@ -61,29 +64,29 @@ const Header: React.FC = () => {
           <span role="img" aria-label="beer mug emoji">
             🍺
           </span>
+          {!isOnline && <OfflineIndicator />}
         </NavbarBrand>
         <NavbarToggler onClick={() => setToggle(!toggle)} />
         <Collapse isOpen={toggle} navbar>
           <Nav className="ml-auto" navbar>
             <NavItem>
-              <NavLink
-                tag={Link}
-                to="/recipes"
-                onClick={() => setToggle(false)}
-              >
-                Рецепты
+              <NavLink tag={Link} to="/404" onClick={() => setToggle(false)}>
+                Поиск рецептов
               </NavLink>
             </NavItem>
-            <NavItem>
-              <NavLink tag={Link} to="/events" onClick={() => setToggle(false)}>
-                События
-              </NavLink>
-            </NavItem>
-            {/* <NavItem>
-              <NavLink tag={Link} to="/blog" onClick={() => setToggle(false)}>
-                Блог
-              </NavLink>
-            </NavItem> */}
+            <UncontrolledDropdown nav inNavbar>
+              <DropdownToggle nav caret>
+                Калькуляторы
+              </DropdownToggle>
+              <DropdownMenu right>
+                <DropdownItem tag={Link} to="/404">
+                  IBU
+                </DropdownItem>
+                <DropdownItem tag={Link} to="/404">
+                  ABV
+                </DropdownItem>
+              </DropdownMenu>
+            </UncontrolledDropdown>
             {user !== null ? (
               <>
                 <AvatarWrapper>
@@ -105,39 +108,58 @@ const Header: React.FC = () => {
                     {user.username}
                   </DropdownToggle>
                   <DropdownMenu right>
+                    {isOnline && (
+                      <>
+                        <DropdownItem tag={Link} to="/add-recipe">
+                          Добавить рецепт
+                        </DropdownItem>
+                        <DropdownItem divider />
+                      </>
+                    )}
                     <DropdownItem tag={Link} to="/my-recipes">
                       Мои рецепты
                     </DropdownItem>
-                    {/* <DropdownItem>Option 2</DropdownItem> */}
-                    <DropdownItem divider />
-                    <DropdownItem
-                      onClick={doLogout}
-                      style={{ color: '#dc3545' }}
-                    >
-                      Выход
+                    <DropdownItem tag={Link} to="/my-brews">
+                      Мои варки
                     </DropdownItem>
+                    {isOnline && (
+                      <>
+                        <DropdownItem divider />
+                        <DropdownItem
+                          onClick={() => {
+                            history.push('/')
+                            doLogout()
+                          }}
+                          style={{ color: '#dc3545' }}
+                        >
+                          Выход
+                        </DropdownItem>
+                      </>
+                    )}
                   </DropdownMenu>
                 </UncontrolledDropdown>
               </>
             ) : (
-              <>
-                <HeaderButton
-                  color="success"
-                  tag={Link}
-                  to="/signin"
-                  onClick={() => setToggle(false)}
-                >
-                  Войти
-                </HeaderButton>
-                <HeaderButton
-                  color="primary"
-                  tag={Link}
-                  to="/signup"
-                  onClick={() => setToggle(false)}
-                >
-                  Регистрация
-                </HeaderButton>
-              </>
+              isOnline && (
+                <>
+                  <HeaderButton
+                    color="success"
+                    tag={Link}
+                    to="/signin"
+                    onClick={() => setToggle(false)}
+                  >
+                    Войти
+                  </HeaderButton>
+                  <HeaderButton
+                    color="primary"
+                    tag={Link}
+                    to="/signup"
+                    onClick={() => setToggle(false)}
+                  >
+                    Регистрация
+                  </HeaderButton>
+                </>
+              )
             )}
           </Nav>
         </Collapse>

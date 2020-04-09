@@ -6,7 +6,7 @@ import { isMobile } from 'react-device-detect'
 const BeerWave: React.FC = () => (
   <BeerWaveWrapper>
     <Wave>
-      <svg width="100%" height={isMobile ? '125px' : '200px'} fill="none">
+      <svg width="100%" height={isMobile ? '125px' : '100px'} fill="none">
         <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stopColor="#E2B125" />
           <stop offset="50%" stopColor="#FFD83B" />
