@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
-import { RecipeType, Recipe, RecipeAccessType, Hop } from '../types'
-import { ibuCalculator, abvCalculator, fetchRefresh } from '../utils'
 import { toast } from 'react-toastify'
 import { useHistory } from 'react-router-dom'
+import axios from 'axios'
+
+import { RecipeType, Recipe, RecipeAccessType, Hop } from '../types'
+import { ibuCalculator, abvCalculator } from '../utils'
 import { useGrainsInForm } from './useGrainsInForm'
 import { useHopsInForm } from './useHopsInForm'
 import { usePausesInForm } from './usePausesInForm'
@@ -49,24 +51,22 @@ export const useRecipeForm = (
 
   useEffect(() => {
     if (type !== RecipeFormType.CREATE && id) {
-      fetchRefresh(`${process.env.REACT_APP_RECIPES_URL}/${id}`).then(
-        ({ ok, data }) => {
-          if (ok) {
-            if (type === RecipeFormType.COPY) {
-              delete data._id
-              delete data.rating
-              delete data.votes
-              delete data.userId
-              delete data.__v
-              delete data.canVote
-              delete data.created_at
-              delete data.updated_at
-            }
-            setRecipe(data)
-            setLoading(false)
+      axios
+        .get(`${process.env.REACT_APP_RECIPES_URL}/${id}`)
+        .then(({ data }) => {
+          if (type === RecipeFormType.COPY) {
+            delete data._id
+            delete data.rating
+            delete data.votes
+            delete data.userId
+            delete data.__v
+            delete data.canVote
+            delete data.created_at
+            delete data.updated_at
           }
-        },
-      )
+          setRecipe(data)
+          setLoading(false)
+        })
     }
   }, [id, type])
 
@@ -214,29 +214,24 @@ export const useRecipeForm = (
     if (isValid) {
       setLoading(true)
 
-      const response = await fetchRefresh(
-        type === RecipeFormType.EDIT && id
-          ? `${process.env.REACT_APP_RECIPES_URL}/${id}`
-          : type === RecipeFormType.COPY
-          ? process.env.REACT_APP_COPY_RECIPES_URL!
-          : process.env.REACT_APP_RECIPES_URL!,
-        {
-          method: type === RecipeFormType.EDIT && id ? 'PATCH' : 'POST',
-          headers: {
-            'Content-Type': 'application/json',
+      try {
+        const { data } = await axios(
+          type === RecipeFormType.EDIT && id
+            ? `${process.env.REACT_APP_RECIPES_URL}/${id}`
+            : type === RecipeFormType.COPY
+            ? process.env.REACT_APP_COPY_RECIPES_URL!
+            : process.env.REACT_APP_RECIPES_URL!,
+          {
+            method: type === RecipeFormType.EDIT && id ? 'patch' : 'post',
+            data: recipe,
           },
-          body: JSON.stringify(recipe),
-        },
-      )
-
-      setLoading(false)
-
-      if (response.ok) {
-        toast.success('Рецепт сохранен!')
-        history.push(
-          `/recipes/${type === RecipeFormType.EDIT ? id : response.data.id}`,
         )
-      } else {
+
+        setLoading(false)
+
+        toast.success('Рецепт сохранен!')
+        history.push(`/recipes/${type === RecipeFormType.EDIT ? id : data.id}`)
+      } catch {
         toast.error('Ошибка сохранения!')
       }
     } else {

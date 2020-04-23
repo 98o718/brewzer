@@ -1,32 +1,32 @@
 import { useState, useCallback, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
-import { fetchRefresh } from '../utils'
-import { toast } from 'react-toastify'
+import axios from 'axios'
 
 export const useFetch = <T>(
   url: string,
   id?: string,
-): [T | undefined, boolean, () => void] => {
+): [T | undefined, boolean, boolean, () => void] => {
   const [data, setData] = useState<T>()
   const [loading, setLoading] = useState(true)
-  const history = useHistory()
+  const [error, setError] = useState(false)
 
   const handleLoad = useCallback(() => {
-    fetchRefresh(id ? `${url}/${id}` : url).then(({ ok, data }) => {
-      if (ok) {
+    axios
+      .get(id ? `${url}/${id}` : url)
+      .then(({ data, status }) => {
+        console.log(data, status)
         setData(data)
         setLoading(false)
-      } else {
-        toast.error('Ошибка загрузки')
-        history.push('/')
-      }
-    })
-  }, [id, history, url])
+      })
+      .catch(() => {
+        setLoading(false)
+        setError(true)
+      })
+  }, [id, url])
 
   useEffect(() => {
     setLoading(true)
     handleLoad()
   }, [id, handleLoad])
 
-  return [data, loading, handleLoad]
+  return [data, loading, error, handleLoad]
 }

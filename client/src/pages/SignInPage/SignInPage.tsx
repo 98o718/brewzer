@@ -23,11 +23,10 @@ import {
 import { BarLoader } from 'react-spinners'
 import { toast } from 'react-toastify'
 import { useHistory } from 'react-router'
-import { useCookies } from 'react-cookie'
+import { getFingerprint } from '../../utils/getFingerprint'
 
 const SignInPage: React.FC = () => {
   const history = useHistory()
-  const [, setCookie] = useCookies()
   const doSignIn = useAction(signIn)
 
   const [isLoading, setLoading] = useState(false)
@@ -74,7 +73,7 @@ const SignInPage: React.FC = () => {
     setErrors(errors)
   }, [credentials, isFirstTime])
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setLoading(true)
     const isInvalid = validate(credentials).length > 0
 
@@ -83,36 +82,26 @@ const SignInPage: React.FC = () => {
       return
     }
 
-    fetch(process.env.REACT_APP_SIGNIN_URL!, {
+    const fingerprint = await getFingerprint()
+
+    const r = await fetch(process.env.REACT_APP_SIGNIN_URL!, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(credentials),
+      body: JSON.stringify({ ...credentials, fingerprint }),
     })
-      .then((r) => {
-        if (!r.ok)
-          throw new Error('Ошибка входа или логин/пароль неправильный.')
-        return r.json()
-      })
-      .then((data) => {
-        setCookie('token', `Bearer ${data.access_token}`, {
-          maxAge: 3600,
-          path: '/',
-        })
-        doSignIn({
-          username: credentials.username,
-          avatar: data.avatar,
-          sub: data.sub,
-        })
-        toast.success('Успешный вход!')
-        history.push('/')
-      })
-      .catch((error) => {
-        console.error(error)
-        toast.error(error.message)
-        setLoading(false)
-      })
+
+    const data = await r.json()
+
+    if (r.ok) {
+      doSignIn(data)
+      toast.success('Успешный вход!')
+      history.push('/')
+    } else {
+      setLoading(false)
+      toast.error('Ошибка входа или логин/пароль неправильный.')
+    }
   }
 
   const handleEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {

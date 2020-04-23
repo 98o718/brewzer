@@ -8,8 +8,9 @@ const cookies = new Cookies()
 
 export const userAtom = declareAtom<User | null>(['user'], null, (on) => [
   on(signIn, (state, value) => value),
-  on(logout, () => {
-    cookies.remove('token', { path: '/' })
+  on(logout, (state) => {
+    cookies.remove('accessToken', { path: '/' })
+    cookies.remove('refreshToken', { path: '/' })
     return null
   }),
 ])

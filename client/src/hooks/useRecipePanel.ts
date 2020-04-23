@@ -3,10 +3,10 @@ import { useAtom } from '@reatom/react'
 import { toast } from 'react-toastify'
 import { useHistory } from 'react-router-dom'
 import copy from 'copy-to-clipboard'
+import axios from 'axios'
 
-import { RecipeDescription, RecipeAccessType } from '../types'
+import { RecipeDescription } from '../types'
 import { userAtom } from '../model'
-import { fetchRefresh } from '../utils'
 
 export const useRecipePanel = (
   recipe: RecipeDescription | undefined,
@@ -63,55 +63,40 @@ export const useRecipePanel = (
   }, [recipe])
 
   const handleShare = useCallback(() => {
-    if (recipe !== undefined)
-      copy(
-        recipe.access === RecipeAccessType.URL
-          ? `${window.origin}/recipes/private/${recipe.url}`
-          : window.location.href,
-      )
+    if (recipe !== undefined) copy(window.location.href)
   }, [recipe])
 
   const handleDelete = useCallback(() => {
     if (recipe !== undefined)
-      fetchRefresh(`${process.env.REACT_APP_RECIPES_URL}/${recipe._id}`, {
-        method: 'DELETE',
-      }).then(({ ok }) => {
-        if (ok) {
+      axios
+        .delete(`${process.env.REACT_APP_RECIPES_URL}/${recipe._id}`)
+        .then(() => {
           history.push('/')
           toast.success('Рецепт удален')
-        } else {
+        })
+        .catch(() => {
           toast.error('Ошибка удаления!')
-        }
-      })
+        })
   }, [recipe, history])
 
   const vote = useCallback(
     (value: number) => {
       if (canVote && recipe !== undefined) {
         setVoting(true)
-        fetchRefresh(
-          `${process.env.REACT_APP_RECIPES_RATE_URL}/${recipe._id}`,
-          {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              vote: value,
-            }),
+        axios(`${process.env.REACT_APP_RECIPES_RATE_URL}/${recipe._id}`, {
+          method: 'PATCH',
+          data: {
+            vote: value,
           },
-        )
-          .then(({ ok }) => {
+        })
+          .then(() => {
             setVoting(false)
-            if (ok) {
-              setCanVote(false)
-              toast.success('Ваш голос учтен!')
-              handleLoad()
-            } else {
-              toast.error('Ошибка голосования! Попробуйте позже')
-            }
+
+            setCanVote(false)
+            toast.success('Ваш голос учтен!')
+            handleLoad()
           })
-          .catch((e) => {
+          .catch(() => {
             setVoting(false)
             toast.error('Ошибка голосования! Попробуйте позже')
           })
@@ -119,6 +104,26 @@ export const useRecipePanel = (
     },
     [recipe, canVote, handleLoad],
   )
+
+  const handleFavorite = async (id: string) => {
+    try {
+      await axios.post(process.env.REACT_APP_ADD_TO_FAVORITES_URL!, { id })
+      handleLoad()
+      toast.success('Рецепт добавлен в избранное!')
+    } catch {
+      toast.error('Ошибка добавления!')
+    }
+  }
+
+  const handleUnFavorite = async (id: string) => {
+    try {
+      await axios.post(process.env.REACT_APP_REMOVE_FROM_FAVORITES_URL!, { id })
+      handleLoad()
+      toast.success('Рецепт убран из избранных!')
+    } catch {
+      toast.error('Ошибка удаления из избранных!')
+    }
+  }
 
   return {
     canVote,
@@ -135,5 +140,7 @@ export const useRecipePanel = (
     handlePrint,
     handleShare,
     handleChange,
+    handleFavorite,
+    handleUnFavorite,
   }
 }

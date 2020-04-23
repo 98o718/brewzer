@@ -3,14 +3,12 @@ import {
   NestInterceptor,
   ExecutionContext,
   CallHandler,
-  Global,
+  UnauthorizedException,
 } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import { map } from 'rxjs/operators'
 
-@Global()
 @Injectable()
-export class RefreshTokenInterceptor implements NestInterceptor {
+export class AuthInterceptor implements NestInterceptor {
   constructor(private readonly jwtService: JwtService) {}
 
   async intercept(context: ExecutionContext, next: CallHandler) {
@@ -24,14 +22,13 @@ export class RefreshTokenInterceptor implements NestInterceptor {
         : null
 
       try {
-        const { exp, iat, ...rest } = await this.jwtService.verifyAsync(token)
-        const newToken = await this.jwtService.signAsync({ ...rest })
-        return next
-          .handle()
-          .pipe(map(data => Object.assign({}, { data }, { newToken })))
-      } catch (error) {
-        console.log(error)
+        const { sub, username } = await this.jwtService.verifyAsync(token)
+        request.user = { userId: sub, username }
+      } catch {
+        throw new UnauthorizedException()
       }
+    } else {
+      request.user = null
     }
     return next.handle()
   }

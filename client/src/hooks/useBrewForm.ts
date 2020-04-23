@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 import { CreateBrew, BrewDescription } from '../types'
-import { fetchRefresh } from '../utils'
+import axios from 'axios'
 import { roundToNearestMinutes, addDays } from 'date-fns'
 
 type useBrewFormProps = {
@@ -34,23 +34,17 @@ export const useBrewForm = ({ id, volume, edit = false }: useBrewFormProps) => {
 
   useEffect(() => {
     if (!edit) {
-      fetchRefresh(`${process.env.REACT_APP_RECIPES_URL}/${id}`).then(
-        ({ ok, data }) => {
-          if (ok) {
-            setBrew((prev) => ({ ...prev, title: data.title }))
-            setLoading(false)
-          }
-        },
-      )
+      axios
+        .get(`${process.env.REACT_APP_RECIPES_URL}/${id}`)
+        .then(({ data }) => {
+          setBrew((prev) => ({ ...prev, title: data.title }))
+          setLoading(false)
+        })
     } else {
-      fetchRefresh(`${process.env.REACT_APP_BREWS_URL}/${id}`).then(
-        ({ ok, data }) => {
-          if (ok) {
-            setBrew(data)
-            setLoading(false)
-          }
-        },
-      )
+      axios.get(`${process.env.REACT_APP_BREWS_URL}/${id}`).then(({ data }) => {
+        setBrew(data)
+        setLoading(false)
+      })
     }
   }, [id, edit])
 
@@ -84,23 +78,20 @@ export const useBrewForm = ({ id, volume, edit = false }: useBrewFormProps) => {
 
     setSending(true)
 
-    const { ok } = await fetchRefresh(
-      edit
-        ? `${process.env.REACT_APP_BREWS_URL}/${id}`
-        : process.env.REACT_APP_BREWS_URL!,
-      {
-        method: edit ? 'PATCH' : 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+    try {
+      await axios(
+        edit
+          ? `${process.env.REACT_APP_BREWS_URL}/${id}`
+          : process.env.REACT_APP_BREWS_URL!,
+        {
+          method: edit ? 'PATCH' : 'POST',
+          data: brew,
         },
-        body: JSON.stringify(brew),
-      },
-    )
+      )
 
-    if (ok) {
       toast.success('Варка добавлена!')
       history.push('/my-brews')
-    } else {
+    } catch {
       toast.error('Ошибка добавления!')
       setLoading(false)
     }

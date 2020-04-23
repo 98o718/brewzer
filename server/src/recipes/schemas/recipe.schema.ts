@@ -1,10 +1,7 @@
-import * as mongoose from 'mongoose'
+import { Schema } from 'mongoose'
 import { RecipeType } from '../recipe-type.enum'
-import { Recipe } from '../interfaces/recipe.interface'
-import uuid from 'uuidv4'
-import { RecipeAccessType } from '../recipe-access-type.enum'
 
-export const RecipeSchema = new mongoose.Schema(
+export const RecipeSchema = new Schema(
   {
     title: String,
     description: String,
@@ -65,21 +62,23 @@ export const RecipeSchema = new mongoose.Schema(
     ibu: Number,
     og: Number,
     fg: Number,
-    userId: mongoose.Schema.Types.ObjectId,
+    userId: { type: Schema.Types.ObjectId, ref: 'User' },
     author: String,
     forked: String,
   },
   {
     discriminatorKey: 'recipeType',
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+    toJSON: {
+      virtuals: true,
+    },
+    toObject: {
+      virtuals: true,
+    },
   },
 )
 
-RecipeSchema.set('toJSON', {
-  virtuals: true,
-})
-
-const PublicRecipeSchema = new mongoose.Schema({
+const PublicRecipeSchema = new Schema({
   rating: {
     type: Number,
     default: 0,
@@ -94,11 +93,10 @@ const PublicRecipeSchema = new mongoose.Schema({
   },
 })
 
-const PrivateRecipeSchema = new mongoose.Schema({
+const PrivateRecipeSchema = new Schema({
   access: {
     type: String,
   },
-  url: String,
 })
 
 export function publicRecipeDescriminator(recipe) {
@@ -108,3 +106,12 @@ export function publicRecipeDescriminator(recipe) {
 export function privateRecipeDescriminator(recipe) {
   return recipe.discriminator(RecipeType.PRIVATE, PrivateRecipeSchema)
 }
+
+RecipeSchema.virtual('favorites', {
+  ref: 'User',
+  localField: '_id',
+  foreignField: 'favorites',
+  justOne: false,
+})
+
+RecipeSchema.plugin(require('mongoose-paginate-v2'))

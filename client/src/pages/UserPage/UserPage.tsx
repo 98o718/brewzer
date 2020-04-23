@@ -1,27 +1,44 @@
 import React from 'react'
-import { RouteComponentProps } from 'react-router-dom'
+import { RouteComponentProps, Redirect } from 'react-router-dom'
 
 import { useFetch } from '../../hooks'
 import { RecipesList } from '../../components'
 import { RecipeDescription } from '../../types'
+import { toast } from 'react-toastify'
+import { useFilter } from '../../hooks/useFilter'
+import Filter from '../../components/Filter'
 
 type UserPageProps = {
   readonly username: string
 }
 
 const UserPage = ({ match }: RouteComponentProps<UserPageProps>) => {
-  const [recipes] = useFetch<RecipeDescription[]>(
+  const [recipes, , error] = useFetch<RecipeDescription[]>(
     process.env.REACT_APP_USER_RECIPES_URL!,
     match.params.username,
   )
 
+  const { filtered, ...filterProps } = useFilter<RecipeDescription>(
+    recipes,
+    'title',
+  )
+
+  if (error) {
+    toast.error('Ничего не найдено!')
+
+    return <Redirect to="/" />
+  }
+
   return (
-    <RecipesList
-      width="500px"
-      heading={`Рецепты ${match.params.username}`}
-      recipes={recipes}
-      showRating
-    />
+    <>
+      {recipes && recipes.length !== 0 && <Filter {...filterProps} />}
+      <RecipesList
+        width="500px"
+        heading={`Рецепты ${match.params.username}`}
+        recipes={filtered}
+        showRating
+      />
+    </>
   )
 }
 

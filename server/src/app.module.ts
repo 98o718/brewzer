@@ -8,8 +8,10 @@ import { MailerModule, PugAdapter } from '@nest-modules/mailer'
 import { AuthModule } from './auth/auth.module'
 import { UsersModule } from './users/users.module'
 import { BrewsModule } from './brews/brews.module'
-import { FilesModule } from './files/files.module'
 import { JwtModule } from './jwt/jwt.module'
+import { CommentsModule } from './comments/comments.module'
+import { CloudinaryModule } from './cloudinary/cloudinary.module'
+import { BcryptModule } from './bcrypt/bcrypt.module';
 
 import * as config from 'config'
 
@@ -47,8 +49,10 @@ const smtpConfig = config.get('smtp')
     AuthModule,
     UsersModule,
     BrewsModule,
-    FilesModule,
     JwtModule,
+    CommentsModule,
+    CloudinaryModule,
+    BcryptModule,
   ],
   controllers: [],
   providers: [AppService],
