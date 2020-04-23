@@ -1,4 +1,8 @@
 /*APPEND COMPONENT IMPORT HERE*/
+import Search from './Search'
+import Filter from './Filter'
+import Settings from './Settings'
+import Comments from './Comments'
 import NoPrint from './NoPrint'
 import RecipePanel from './RecipePanel'
 import Recipe from './Recipe'
@@ -14,6 +18,10 @@ import Layout from './Layout'
 
 export {
   /*APPEND COMPONENT EXPORT HERE*/
+  Search,
+  Filter,
+  Settings,
+  Comments,
   NoPrint,
   RecipePanel,
   Recipe,
