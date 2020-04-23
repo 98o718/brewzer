@@ -6,6 +6,7 @@ import {
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import { AppModule } from './app.module'
 import * as fMultiPart from 'fastify-multipart'
+import * as fastifyCookie from 'fastify-cookie'
 
 async function bootstrap() {
   const fAdapt = new FastifyAdapter()
@@ -15,6 +16,8 @@ async function bootstrap() {
       fileSize: 5000000,
     },
   })
+
+  fAdapt.register(fastifyCookie)
 
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,

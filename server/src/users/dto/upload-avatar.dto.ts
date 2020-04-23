@@ -4,6 +4,7 @@ import {
   ValidateNested,
   Equals,
   IsIn,
+  IsOptional,
 } from 'class-validator'
 import { Type } from 'class-transformer'
 import { ApiModelProperty } from '@nestjs/swagger'
@@ -28,6 +29,7 @@ export class Avatar {
 }
 
 export class UploadAvatarDto {
+  @IsOptional()
   @ArrayMaxSize(1)
   @Type(() => Avatar)
   @ValidateNested()

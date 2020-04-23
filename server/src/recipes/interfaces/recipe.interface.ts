@@ -68,10 +68,10 @@ export interface Recipe extends Document {
   rating?: number
   votes?: number[]
   voted?: string[]
+  favorites?: string[]
   canVote?: boolean
   forked?: string
   access?: RecipeAccessType
-  url?: string
 }
 
 export interface PublicRecipe extends Recipe {
@@ -82,5 +82,4 @@ export interface PublicRecipe extends Recipe {
 
 export interface PrivateRecipe extends Recipe {
   readonly access: RecipeAccessType
-  url?: string
 }

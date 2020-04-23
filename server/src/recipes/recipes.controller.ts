@@ -17,13 +17,13 @@ import { Recipe } from './interfaces/recipe.interface'
 import { ApiUseTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger'
 import { FindRecipeDto } from './dto/find-recipe.dto'
 import { AuthGuard } from '@nestjs/passport'
-import { GetUser } from '../auth/get-user.decorator'
+import { GetUser } from '../auth/decorators/get-user.decorator'
 import { UserInfo } from '../users/interfaces/user-info.interface'
-import { AuthInterceptor } from '../auth/auth.interceptor'
-import { RefreshTokenInterceptor } from '../auth/refresh-token.interceptor'
+import { AuthInterceptor } from '../auth/interceptors/auth.interceptor'
 import { RateRecipeDto } from './dto/rate-recipe.dto'
+import { userInfo } from 'os'
+import { SelectRecipesDto } from './dto/select-recipes.dto'
 
-@UseInterceptors(RefreshTokenInterceptor)
 @Controller('recipes')
 @ApiUseTags('Recipes')
 export class RecipesController {
@@ -92,6 +92,12 @@ export class RecipesController {
     )
   }
 
+  @Post('search')
+  @ApiOperation({ title: 'Select recipes' })
+  async select(@Body(ValidationPipe) selectRecipesDto: SelectRecipesDto) {
+    return await this.recipesService.select(selectRecipesDto)
+  }
+
   @UseInterceptors(AuthInterceptor)
   @Get('/:id')
   @ApiBearerAuth()
@@ -101,12 +107,6 @@ export class RecipesController {
     @GetUser() user: UserInfo | null,
   ): Promise<Recipe> {
     return await this.recipesService.findById(id, user)
-  }
-
-  @Get('/private/:url')
-  @ApiOperation({ title: 'Get private recipe by URL' })
-  async findByUrl(@Param('url') url: string): Promise<Recipe> {
-    return await this.recipesService.findByUrl(url)
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -142,6 +142,14 @@ export class RecipesController {
     @GetUser() user: UserInfo,
   ): Promise<void> {
     await this.recipesService.delete(id, user)
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @Get('/favorite')
+  @ApiOperation({ title: "Get user's favorites" })
+  async findFavorites(@GetUser() user: UserInfo): Promise<Recipe[]> {
+    return await this.recipesService.findFavorites(user)
   }
 
   @UseGuards(AuthGuard('jwt'))

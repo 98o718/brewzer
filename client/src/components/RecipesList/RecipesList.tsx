@@ -33,6 +33,7 @@ type RecipesListProps = {
   recipes: RecipeDescription[] | undefined
   handleEdit?: (id: string) => void
   handleDelete?: (id: string) => void
+  headingRef?: React.RefObject<HTMLDivElement>
 }
 
 const RecipesList = ({
@@ -43,12 +44,19 @@ const RecipesList = ({
   recipes,
   handleDelete,
   width,
+  headingRef,
 }: RecipesListProps) => {
   const user = useAtom(userAtom)
 
+  console.log(headingRef)
+
   return (
-    <RecipesListWrapper style={{ width }} type={isMobile ? 'true' : undefined}>
-      {heading && <h2>{heading}</h2>}
+    <RecipesListWrapper
+      ref={headingRef ? headingRef : undefined}
+      style={{ width }}
+      type={isMobile ? 'true' : undefined}
+    >
+      {heading && recipes !== undefined && <h2>{heading}</h2>}
       <ListGroup>
         {!recipes ? (
           <BarLoader width="100%" />

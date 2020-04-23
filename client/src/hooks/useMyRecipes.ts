@@ -1,6 +1,6 @@
 import { useHistory } from 'react-router-dom'
 
-import { fetchRefresh } from '../utils'
+import axios from 'axios'
 import { toast } from 'react-toastify'
 
 export const useMyRecipes = (handleLoad: () => void) => {
@@ -11,16 +11,15 @@ export const useMyRecipes = (handleLoad: () => void) => {
   }
 
   const handleDelete = (id: string) => {
-    fetchRefresh(`${process.env.REACT_APP_RECIPES_URL}/${id}`, {
-      method: 'DELETE',
-    }).then(({ ok }) => {
-      if (ok) {
+    axios
+      .delete(`${process.env.REACT_APP_RECIPES_URL}/${id}`)
+      .then(() => {
         handleLoad()
         toast.success('Рецепт удален')
-      } else {
+      })
+      .catch(() => {
         toast.error('Ошибка удаления!')
-      }
-    })
+      })
   }
 
   return { handleEdit, handleDelete }

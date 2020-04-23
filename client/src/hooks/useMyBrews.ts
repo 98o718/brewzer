@@ -1,22 +1,20 @@
 import { toast } from 'react-toastify'
 import { useHistory } from 'react-router-dom'
-
-import { fetchRefresh } from '../utils'
+import axios from 'axios'
 
 export const useMyBrews = (reload: () => void) => {
   const history = useHistory()
 
   const handleDelete = (id: string) => {
-    fetchRefresh(`${process.env.REACT_APP_BREWS_URL}/${id}`, {
-      method: 'DELETE',
-    }).then(({ ok }) => {
-      if (ok) {
+    axios
+      .delete(`${process.env.REACT_APP_BREWS_URL}/${id}`)
+      .then(() => {
         reload()
         toast.success('Варка удалена')
-      } else {
+      })
+      .catch(() => {
         toast.error('Ошибка удаления')
-      }
-    })
+      })
   }
 
   const handleEdit = (id: string) => {

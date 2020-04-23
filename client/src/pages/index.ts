@@ -1,6 +1,10 @@
 /*APPEND PAGE IMPORT HERE*/
+import SearchPage from './SearchPage'
+import AbvPage from './AbvPage'
+import IbuPage from './IbuPage'
+import FavoriteRecipesPage from './FavoriteRecipesPage'
+import SettingsPage from './SettingsPage'
 import UserPage from './UserPage'
-import PrivateRecipePage from './PrivateRecipePage'
 import CopyRecipePage from './CopyRecipePage'
 import RecipePage from './RecipePage'
 import EditRecipePage from './EditRecipePage'
@@ -18,8 +22,12 @@ import SignUpPage from './SignUpPage'
 
 export {
   /*APPEND PAGE EXPORT HERE*/
+  SearchPage,
+  AbvPage,
+  IbuPage,
+  FavoriteRecipesPage,
+  SettingsPage,
   UserPage,
-  PrivateRecipePage,
   CopyRecipePage,
   RecipePage,
   EditRecipePage,

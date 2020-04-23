@@ -10,7 +10,7 @@ const jwtConfig = config.get('jwt')
   imports: [
     Jwt.register({
       secret: jwtConfig.secret,
-      signOptions: { expiresIn: jwtConfig.expiresIn },
+      signOptions: { expiresIn: jwtConfig.expiresInAccess },
     }),
   ],
   exports: [Jwt],

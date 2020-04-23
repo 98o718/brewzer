@@ -3,11 +3,17 @@ import { UsersService } from './users.service'
 import { UsersController } from './users.controller'
 import { MongooseModule } from '@nestjs/mongoose'
 import { UserSchema } from './schemas/user.schema'
-import { FilesService } from '../files/files.service'
+import { CloudinaryService } from '../cloudinary/cloudinary.service'
+import { CloudinaryModule } from 'src/cloudinary/cloudinary.module'
+import { BcryptModule } from 'src/bcrypt/bcrypt.module'
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: 'User', schema: UserSchema }])],
-  providers: [UsersService, FilesService],
+  imports: [
+    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+    CloudinaryModule,
+    BcryptModule,
+  ],
+  providers: [UsersService, CloudinaryService],
   exports: [UsersService],
   controllers: [UsersController],
 })
