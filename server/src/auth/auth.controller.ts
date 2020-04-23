@@ -1,15 +1,12 @@
 import {
   Controller,
   Get,
-  Request,
   Post,
   UseGuards,
   UseInterceptors,
   Body,
-  Res,
   Req,
   ValidationPipe,
-  Ip,
 } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
 import { ApiUseTags, ApiBearerAuth, ApiImplicitBody } from '@nestjs/swagger'
@@ -22,6 +19,7 @@ import { SetCookieInterceptor } from './interceptors/set-cookie.interceptor'
 import { RefreshTokenDto } from './dto/refresh-token.dto'
 import { GetCookies } from './decorators/get-cookies.decorator'
 import { UserInfo } from 'src/users/interfaces/user-info.interface'
+import { GetIp } from './decorators/get-ip.decorator'
 
 @Controller('auth')
 @ApiUseTags('Auth')
@@ -39,7 +37,7 @@ export class AuthController {
   async login(
     @GetUser() user: User,
     @Body('fingerprint') fingerpring: string,
-    @Ip() ip: string,
+    @GetIp() ip: string,
     @Req() req,
   ) {
     return await this.authService.login(user, fingerpring, ip, req)
@@ -54,7 +52,7 @@ export class AuthController {
   @Post('refresh-token')
   async refreshToken(
     @Body(ValidationPipe) refreshTokenDto: RefreshTokenDto,
-    @Ip() ip: string,
+    @GetIp() ip: string,
     @GetCookies() cookies: { [key: string]: any } | undefined,
     @Req() req,
   ) {
