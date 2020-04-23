@@ -62,6 +62,7 @@ UserSchema.pre('save', async function(this: User) {
     })
 
     this.miniAvatar = cloudinary.v2.url(this.avatarId, {
+      secure: true,
       height: 80,
     })
   } else {
