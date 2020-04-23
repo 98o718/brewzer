@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import {
-  HeaderWrapper,
-  HeaderButton,
-  AvatarWrapper,
-  OfflineIndicator,
-} from './Header.styles'
-
-import {
   Collapse,
   Navbar,
   NavbarToggler,
@@ -21,11 +14,16 @@ import {
 } from 'reactstrap'
 import { Link, useHistory } from 'react-router-dom'
 import Avatar from 'react-avatar'
-
-import { useAtom, useAction } from '@reatom/react'
-import { userAtom, logout } from '../../model'
 import { Cookies } from 'react-cookie'
-import { fetchRefresh } from '../../utils'
+import { useAtom, useAction } from '@reatom/react'
+
+import {
+  HeaderWrapper,
+  HeaderButton,
+  AvatarWrapper,
+  OfflineIndicator,
+} from './Header.styles'
+import { userAtom, logout } from '../../model'
 import { useOnlineDetector } from '../../hooks'
 
 const Header: React.FC = () => {
@@ -38,20 +36,26 @@ const Header: React.FC = () => {
   const history = useHistory()
 
   useEffect(() => {
-    history.listen(() => {
-      const token = new Cookies().get('token')
-
-      if (!token) doLogout()
-    })
-
     if (isOnline) {
-      fetchRefresh(process.env.REACT_APP_VERIFY_AUTH_URL!).then((r) => {
-        if (!r.ok) {
+      const token = new Cookies().get('accessToken')
+
+      if (!token) {
+        doLogout()
+      }
+    }
+  }, [doLogout, isOnline])
+
+  useEffect(() => {
+    history.listen(() => {
+      if (isOnline) {
+        const token = new Cookies().get('accessToken')
+
+        if (!token) {
           doLogout()
         }
-      })
-    }
-  }, [history, doLogout, isOnline])
+      }
+    })
+  }, [history, doLogout, isOnline, user])
 
   return (
     <HeaderWrapper>
@@ -69,27 +73,33 @@ const Header: React.FC = () => {
         <NavbarToggler onClick={() => setToggle(!toggle)} />
         <Collapse isOpen={toggle} navbar>
           <Nav className="ml-auto" navbar>
-            <NavItem>
-              <NavLink tag={Link} to="/404" onClick={() => setToggle(false)}>
-                Поиск рецептов
-              </NavLink>
-            </NavItem>
+            {isOnline && (
+              <NavItem>
+                <NavLink
+                  tag={Link}
+                  to="/search"
+                  onClick={() => setToggle(false)}
+                >
+                  Поиск рецептов
+                </NavLink>
+              </NavItem>
+            )}
             <UncontrolledDropdown nav inNavbar>
               <DropdownToggle nav caret>
                 Калькуляторы
               </DropdownToggle>
               <DropdownMenu right>
-                <DropdownItem tag={Link} to="/404">
+                <DropdownItem tag={Link} to="/calculators/ibu">
                   IBU
                 </DropdownItem>
-                <DropdownItem tag={Link} to="/404">
+                <DropdownItem tag={Link} to="/calculators/abv">
                   ABV
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
             {user !== null ? (
               <>
-                <AvatarWrapper>
+                <AvatarWrapper transparent={user.avatar.startsWith('http')}>
                   {user.avatar.startsWith('http') ? (
                     <Avatar
                       name={user.username}
@@ -116,6 +126,9 @@ const Header: React.FC = () => {
                         <DropdownItem divider />
                       </>
                     )}
+                    <DropdownItem tag={Link} to="/favorites">
+                      Избранные ♥
+                    </DropdownItem>
                     <DropdownItem tag={Link} to="/my-recipes">
                       Мои рецепты
                     </DropdownItem>
@@ -124,6 +137,10 @@ const Header: React.FC = () => {
                     </DropdownItem>
                     {isOnline && (
                       <>
+                        <DropdownItem divider />
+                        <DropdownItem tag={Link} to="/settings">
+                          Настройки
+                        </DropdownItem>
                         <DropdownItem divider />
                         <DropdownItem
                           onClick={() => {

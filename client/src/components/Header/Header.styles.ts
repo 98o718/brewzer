@@ -17,9 +17,10 @@ export const HeaderButton = styled(Button)`
   }
 `
 
-export const AvatarWrapper = styled.div`
+export const AvatarWrapper = styled.div<{ transparent?: boolean }>`
   margin-left: 15px;
-  background: lightgray;
+  background: ${({ transparent }) =>
+    transparent ? 'transparent' : 'lightgray'};
   border-radius: 50%;
   display: inline-flex;
   /* align-items: center; */
