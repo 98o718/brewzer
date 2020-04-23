@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import React from 'react'
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { useAtom } from '@reatom/react'
 
 import { Header, PrivateRoute } from './components'
@@ -18,19 +18,21 @@ import {
   EditRecipePage,
   RecipePage,
   CopyRecipePage,
-  PrivateRecipePage,
   UserPage,
+  SettingsPage,
+  FavoriteRecipesPage,
+  IbuPage,
+  AbvPage,
+  SearchPage,
 } from './pages'
 import { userAtom } from './model'
+import Cookies from 'universal-cookie'
 
 export const Router = () => {
   const user = useAtom(userAtom)
+  const token = new Cookies().get('accessToken')
 
-  const [isAuthenticated, setAuthenticated] = useState(user !== null)
-
-  useEffect(() => {
-    setAuthenticated(user !== null)
-  }, [user, isAuthenticated])
+  const isAuthenticated = user !== null && !!token
 
   return (
     <BrowserRouter>
@@ -65,6 +67,11 @@ export const Router = () => {
         />
         <PrivateRoute
           isAuthenticated={isAuthenticated}
+          path="/favorites"
+          component={FavoriteRecipesPage}
+        />
+        <PrivateRoute
+          isAuthenticated={isAuthenticated}
           path="/copy-recipe/:id"
           component={CopyRecipePage}
         />
@@ -78,11 +85,21 @@ export const Router = () => {
           path="/edit-brew/:id"
           component={EditBrewPage}
         />
+        <PrivateRoute
+          isAuthenticated={isAuthenticated}
+          path="/settings"
+          component={SettingsPage}
+        />
         <Route exact path="/(|recipes)" component={RecipesPage} />
-        <Route path="/recipes/private/:url" component={PrivateRecipePage} />
         <Route path="/recipes/:id" component={RecipePage} />
+        <Route path="/calculators/ibu" component={IbuPage} />
+        <Route path="/calculators/abv" component={AbvPage} />
         <Route path="/user/:username" component={UserPage} />
-        <Route component={NotFoundPage} />
+        <Route path="/search" component={SearchPage} />
+        <Route path="/404" component={NotFoundPage} />
+        <Route>
+          <Redirect to="/404" />
+        </Route>
       </Switch>
     </BrowserRouter>
   )
