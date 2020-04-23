@@ -8,6 +8,7 @@ import {
   faPen,
   faTrash,
   faBullhorn,
+  faHeart,
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -18,6 +19,7 @@ import {
   IconButton,
   VolumeInput,
 } from './RecipePanel.styles'
+import { RecipeType, RecipeAccessType } from '../../types'
 
 type RecipePanelProps = {
   isAuthorized: boolean
@@ -27,6 +29,7 @@ type RecipePanelProps = {
   voting: boolean
   loading?: boolean
   volume: number | ''
+  isOnline?: boolean
   handleEdit: () => void
   handleDelete: () => void
   handleBrew: () => void
@@ -34,6 +37,12 @@ type RecipePanelProps = {
   handlePrint: () => void
   handleShare: () => void
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  handleFavorite: (id: string) => Promise<void>
+  handleUnFavorite: (id: string) => Promise<void>
+  favorite: boolean
+  id: string | undefined
+  type: RecipeType | undefined
+  access: RecipeAccessType | undefined
 }
 
 const RecipePanel = ({
@@ -43,6 +52,7 @@ const RecipePanel = ({
   vote,
   voting,
   loading = false,
+  isOnline = true,
   volume,
   handleEdit,
   handleDelete,
@@ -51,6 +61,12 @@ const RecipePanel = ({
   handlePrint,
   handleShare,
   handleChange,
+  favorite = false,
+  handleFavorite,
+  handleUnFavorite,
+  id,
+  type,
+  access,
 }: RecipePanelProps) => {
   return (
     <RecipePanelWrapper>
@@ -62,7 +78,7 @@ const RecipePanel = ({
             onChange={handleChange}
             placeholder="Объем"
           />
-          {isAuthorized && (
+          {isAuthorized && isOnline && (
             <>
               <Button
                 outline
@@ -72,6 +88,23 @@ const RecipePanel = ({
               >
                 Сварить
               </Button>
+              {(isAuthor ||
+                type === RecipeType.PUBLIC ||
+                access === RecipeAccessType.URL) && (
+                <IconButton
+                  onClick={
+                    id !== undefined
+                      ? favorite
+                        ? handleUnFavorite.bind(null, id)
+                        : handleFavorite.bind(null, id)
+                      : () => {}
+                  }
+                  title="Добавить в избранные"
+                  color={favorite ? '#E91E63' : undefined}
+                >
+                  <FontAwesomeIcon icon={faHeart} />
+                </IconButton>
+              )}
               <IconButton onClick={handleCopy} title="Скопировать">
                 <FontAwesomeIcon icon={faCopy} />
               </IconButton>
@@ -80,7 +113,7 @@ const RecipePanel = ({
           <IconButton onClick={handlePrint} title="Напечатать">
             <FontAwesomeIcon icon={faPrint} />
           </IconButton>
-          {isAuthor && (
+          {isAuthor && isOnline && (
             <>
               <IconButton onClick={handleShare} title="Скопировать ссылку">
                 <FontAwesomeIcon icon={faBullhorn} />
