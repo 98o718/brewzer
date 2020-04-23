@@ -11,7 +11,7 @@ import { BrewsModule } from './brews/brews.module'
 import { JwtModule } from './jwt/jwt.module'
 import { CommentsModule } from './comments/comments.module'
 import { CloudinaryModule } from './cloudinary/cloudinary.module'
-import { BcryptModule } from './bcrypt/bcrypt.module';
+import { BcryptModule } from './bcrypt/bcrypt.module'
 
 import * as config from 'config'
 
