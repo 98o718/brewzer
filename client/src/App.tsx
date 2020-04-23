@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react'
 import { Global, css } from '@emotion/core'
-
-import { createStore } from '@reatom/core'
-import { context } from '@reatom/react'
+import { Store } from '@reatom/core'
 import { connectReduxDevtools } from '@reatom/debug'
 
 import emotionNormalize from 'emotion-normalize'
@@ -16,11 +14,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { Layout, BeerWave, NoPrint } from './components'
 import { Router } from './Router'
 
-const App: React.FC = () => {
-  const store = createStore(
-    JSON.parse(`${localStorage.getItem('app_store')}`) || {},
-  )
-
+const App = ({ store }: { store: Store }) => {
   // eslint-disable-next-line
   useEffect(() => connectReduxDevtools(store), [])
 
@@ -31,7 +25,7 @@ const App: React.FC = () => {
   })
 
   return (
-    <context.Provider value={store}>
+    <>
       <ToastContainer
         position="top-right"
         style={{ marginTop: 50 }}
@@ -84,7 +78,7 @@ const App: React.FC = () => {
       <NoPrint>
         <BeerWave />
       </NoPrint>
-    </context.Provider>
+    </>
   )
 }
 
