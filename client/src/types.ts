@@ -31,6 +31,7 @@ export interface RecipeDescription extends Recipe {
   ibu: number
   og: number
   fg: number
+  favorites: boolean
 }
 
 export interface Grain {
@@ -45,6 +46,12 @@ export interface Hop {
   alpha: number
   hopType?: string
   time: number
+}
+
+export type CalculatorHop = {
+  weight: number | ''
+  alpha: number | ''
+  time: number | ''
 }
 
 export interface DryHop {
@@ -135,4 +142,41 @@ export enum WhenOther {
   FIRST = 'Главное брожение',
   SECOND = 'Вторичное брожение',
   CARB = 'Карбонизация',
+}
+
+export type User = {
+  username: string
+  miniAvatar: string
+  avatar: string
+  withPhoto: boolean
+}
+
+export interface Comment {
+  entity: string
+  text: string
+}
+
+export interface CommentDescription extends Comment {
+  id: string
+  user: User
+  created: string
+}
+
+export type PaginateResult<T> = {
+  docs: T[]
+  totalDocs: number
+  limit: number
+  totalPages: number
+  page: number
+  pagingCounter: number
+  hasPrevPage: boolean
+  hasNextPage: boolean
+  prevPage: number | null
+  nextPage: number | null
+}
+
+export type Session = {
+  id: string
+  ip: string
+  updated: string
 }
