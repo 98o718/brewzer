@@ -35,7 +35,7 @@ const smtpConfig = config.get('smtp')
         },
       },
       defaults: {
-        from: '"brewzer" <contact@brewzer.site>',
+        from: `"${smtpConfig.name}" <${smtpConfig.mail}>`,
       },
       template: {
         dir: 'templates',
