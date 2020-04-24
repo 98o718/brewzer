@@ -32,10 +32,10 @@ workbox.precaching.precacheAndRoute(self.__WB_MANIFEST)
 // RUNTIME CACHING
 
 // API with network-first strategy
-// workbox.routing.registerRoute(
-//   /(http[s]?:\/\/)?([^\/\s]+\/)timeline/,
-//   workbox.strategies.networkFirst()
-// )
+workbox.routing.registerRoute(
+  /(http[s]?:\/\/)?([^\/\s]+\/)api/,
+  workbox.strategies.networkFirst(),
+)
 
 // API with cache-first strategy
 // workbox.routing.registerRoute(
