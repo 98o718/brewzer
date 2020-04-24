@@ -12,5 +12,9 @@ export const MyRecipesPanelWrapper = styled.div`
     &:last-of-type {
       margin-right: 0;
     }
+
+    @media (max-width: 576px) {
+      width: 100%;
+    }
   }
 `

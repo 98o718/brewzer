@@ -3,7 +3,9 @@ import {
   BrewFormWrapper,
   ButtonContainer,
   ButtonInner,
+  DataWrapper,
 } from './BrewForm.styles'
+import 'react-datepicker/dist/react-datepicker.css'
 import { BarLoader } from 'react-spinners'
 import { Form, Row, Col, FormGroup, Label, Input, Button } from 'reactstrap'
 import { Link } from 'react-router-dom'
@@ -11,6 +13,7 @@ import { CreateBrew, BrewDescription } from '../../types'
 import TextareaAutosize from 'react-autosize-textarea'
 import DatePicker, { registerLocale } from 'react-datepicker'
 import { ru } from 'date-fns/locale'
+import { Global, css } from '@emotion/core'
 
 type BrewFormProps = {
   isLoading: boolean
@@ -37,6 +40,28 @@ const BrewForm = ({
 
   return (
     <BrewFormWrapper>
+      <Global
+        styles={css`
+          .react-datepicker__time {
+            border-top-right-radius: 0.3rem;
+            border-bottom-right-radius: 0.3rem;
+          }
+
+          @media (max-width: 765px) {
+            .react-datepicker__time-container {
+              width: 55px;
+            }
+
+            .react-datepicker__header--time {
+              display: none;
+            }
+
+            .react-datepicker__time-box {
+              width: 100% !important;
+            }
+          }
+        `}
+      />
       <h1>{edit ? 'Редактирование варки' : 'Новая варка'}</h1>
       {isLoading ? (
         <BarLoader />
@@ -104,38 +129,34 @@ const BrewForm = ({
               />
             </FormGroup>
           </Row>
-          <Row form>
-            <Col>
-              <FormGroup>
-                <Label>Дата варки</Label>
-                <DatePicker
-                  inline
-                  showTimeSelect
-                  timeCaption="Время"
-                  timeIntervals={15}
-                  selected={new Date(brew.brewDate)}
-                  onChange={(date) => setDate(date, 'brewDate')}
-                  className="form-control"
-                  locale="ru"
-                />
-              </FormGroup>
-            </Col>
-            <Col>
-              <FormGroup>
-                <Label>Предполагаемая дата розлива</Label>
-                <DatePicker
-                  inline
-                  showTimeSelect
-                  timeCaption="Время"
-                  timeIntervals={15}
-                  selected={new Date(brew.bottlingDate || '')}
-                  onChange={(date) => setDate(date, 'bottlingDate')}
-                  className="form-control"
-                  locale="ru"
-                />
-              </FormGroup>
-            </Col>
-          </Row>
+          <DataWrapper>
+            <FormGroup>
+              <Label>Дата варки</Label>
+              <DatePicker
+                inline
+                showTimeSelect
+                timeCaption="Время"
+                timeIntervals={15}
+                selected={new Date(brew.brewDate)}
+                onChange={(date) => setDate(date, 'brewDate')}
+                className="form-control"
+                locale="ru"
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>Предполагаемая дата розлива</Label>
+              <DatePicker
+                inline
+                showTimeSelect
+                timeCaption="Время"
+                timeIntervals={15}
+                selected={new Date(brew.bottlingDate || '')}
+                onChange={(date) => setDate(date, 'bottlingDate')}
+                className="form-control"
+                locale="ru"
+              />
+            </FormGroup>
+          </DataWrapper>
           <ButtonContainer>
             <Button
               style={{ width: 200 }}

@@ -1,4 +1,5 @@
 import styled from '@emotion/styled'
+import { Input } from 'reactstrap'
 
 export const CommentsWrapper = styled.div`
   display: flex;
@@ -49,4 +50,12 @@ export const AvatarWrapper = styled.div`
   height: 40px;
   border-radius: 50%;
   background: lightgray;
+`
+
+export const CommentsInput = styled(Input)`
+  width: 300px;
+
+  @media (max-width: 576px) {
+    width: 230px;
+  }
 `

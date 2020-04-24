@@ -1,6 +1,6 @@
 import React from 'react'
-import { FilterWrapper } from './Filter.styles'
-import { Input, InputGroupAddon, Button, InputGroup } from 'reactstrap'
+import { FilterWrapper, FilterInputGroup } from './Filter.styles'
+import { Input, InputGroupAddon, Button } from 'reactstrap'
 
 type FilterProps = {
   value: string
@@ -11,14 +11,14 @@ type FilterProps = {
 const Filter = ({ value, handleChange, reset }: FilterProps) => {
   return (
     <FilterWrapper>
-      <InputGroup style={{ width: 200 }}>
+      <FilterInputGroup>
         <Input placeholder="Фильтр" value={value} onChange={handleChange} />
         {value !== '' && (
           <InputGroupAddon addonType="append">
             <Button onClick={reset}>Сброс</Button>
           </InputGroupAddon>
         )}
-      </InputGroup>
+      </FilterInputGroup>
     </FilterWrapper>
   )
 }

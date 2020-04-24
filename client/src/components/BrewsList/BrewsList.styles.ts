@@ -6,6 +6,10 @@ export const BrewsListWrapper = styled.div`
   width: 100%;
   min-width: 270px;
   margin-bottom: 30px;
+
+  @media (max-width: 576px) {
+    width: 100% !important;
+  }
 `
 
 export const BrewItem = styled.div`

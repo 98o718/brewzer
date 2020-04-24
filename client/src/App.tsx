@@ -9,8 +9,6 @@ import 'bootstrap/dist/css/bootstrap.css'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
-import 'react-datepicker/dist/react-datepicker.css'
-
 import { Layout, BeerWave, NoPrint } from './components'
 import { Router } from './Router'
 
@@ -68,6 +66,13 @@ const App = ({ store }: { store: Store }) => {
           @media only screen and (max-width: 480px) {
             .Toastify__toast {
               border-radius: 1px;
+            }
+          }
+
+          @media (max-width: 767px) and (max-height: 415px) {
+            .dropdown-menu {
+              max-height: 130px;
+              overflow-y: scroll;
             }
           }
         `}

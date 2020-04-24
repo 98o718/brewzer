@@ -8,6 +8,10 @@ export const RecipeFormWrapper = styled.div`
 `
 export const AddRecipeForm = styled(Form)`
   width: 400px;
+
+  @media (max-width: 576px) {
+    width: 100%;
+  }
 `
 export const AddRecipeCard = styled(Card)`
   margin-bottom: 15px;

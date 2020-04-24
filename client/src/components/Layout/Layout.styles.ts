@@ -12,4 +12,10 @@ export const LayoutWrapper = styled.div`
   width: 100%;
   align-items: center;
   box-sizing: border-box;
+
+  @media (max-width: 576px) {
+    padding: 10px;
+    padding-top: 90px;
+    padding-bottom: 80px;
+  }
 `

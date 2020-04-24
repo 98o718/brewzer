@@ -5,7 +5,6 @@ import {
   PaginationLink,
   ListGroup,
   ListGroupItem,
-  Input,
   FormGroup,
   Form,
   Button,
@@ -27,6 +26,7 @@ import {
   CommentDate,
   IconButtom,
   AvatarWrapper,
+  CommentsInput,
 } from './Comments.styles'
 import { CommentDescription } from '../../types'
 
@@ -131,8 +131,7 @@ const Comments = ({
             <Row form>
               <Col>
                 <FormGroup className="d-flex flex-row align-items-center justify-content-center">
-                  <Input
-                    style={{ width: 300 }}
+                  <CommentsInput
                     type="textarea"
                     spellCheck={false}
                     name="description"

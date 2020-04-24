@@ -7,14 +7,10 @@ import {
   RecipeRightPanel,
   ButtonsWrapper,
   IconButton,
+  RecipeListGroupItem,
 } from './RecipesList.styles'
 
-import {
-  ListGroup,
-  ListGroupItem,
-  UncontrolledTooltip,
-  Button,
-} from 'reactstrap'
+import { ListGroup, UncontrolledTooltip, Button } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import { isMobile } from 'react-device-detect'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -48,8 +44,6 @@ const RecipesList = ({
 }: RecipesListProps) => {
   const user = useAtom(userAtom)
 
-  console.log(headingRef)
-
   return (
     <RecipesListWrapper
       ref={headingRef ? headingRef : undefined}
@@ -62,11 +56,7 @@ const RecipesList = ({
           <BarLoader width="100%" />
         ) : recipes.length > 0 ? (
           recipes.map((recipe, index) => (
-            <ListGroupItem
-              tag={Recipe}
-              key={index}
-              className="d-flex flex-row justify-content-between"
-            >
+            <RecipeListGroupItem tag={Recipe} key={index} column={showButtons}>
               <RecipeInfoWrapper>
                 <span>
                   <Link to={`/recipes/${recipe.id}`}>{recipe.title}</Link>{' '}
@@ -155,7 +145,7 @@ const RecipesList = ({
                   )}
                 </ButtonsWrapper>
               )}
-            </ListGroupItem>
+            </RecipeListGroupItem>
           ))
         ) : (
           'Нет рецептов'

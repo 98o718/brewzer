@@ -20,3 +20,22 @@ export const ButtonContainer = styled.div`
   width: 100%;
   justify-content: center;
 `
+
+export const DataWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  @media (max-width: 710px) {
+    flex-direction: column;
+  }
+
+  .form-group:first-of-type {
+    margin-right: 15px;
+
+    @media (max-width: 710px) {
+      margin-right: 0;
+    }
+  }
+`

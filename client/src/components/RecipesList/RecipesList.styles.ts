@@ -1,4 +1,5 @@
 import styled from '@emotion/styled'
+import { ListGroupItem } from 'reactstrap'
 
 type RecipesListWrapperProps = {
   type?: string
@@ -9,6 +10,10 @@ export const RecipesListWrapper = styled.div<RecipesListWrapperProps>`
   flex-direction: column;
   width: 100%;
   margin-bottom: 30px;
+
+  @media (max-width: 576px) {
+    width: 100% !important;
+  }
 `
 
 export const Recipe = styled.div`
@@ -26,6 +31,15 @@ export const Lock = styled.span`
 export const RecipeInfoWrapper = styled.div`
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 576px) {
+    align-items: center;
+    width: 100%;
+
+    * {
+      text-align: center;
+    }
+  }
 `
 
 export const RecipeRightPanel = styled.div`
@@ -33,12 +47,22 @@ export const RecipeRightPanel = styled.div`
   align-self: center;
   display: flex;
   align-items: center;
+
+  @media (max-width: 576px) {
+    margin-left: 8px;
+  }
 `
 
 export const ButtonsWrapper = styled.div`
   margin-left: 15px;
   display: flex;
   align-items: center;
+
+  @media (max-width: 576px) {
+    margin-top: 15px;
+    justify-content: center;
+    margin-left: 0;
+  }
 `
 
 type IconButtonProps = {
@@ -66,4 +90,16 @@ export const IconButton = styled.button<IconButtonProps>`
   &:active {
     transform: scale(0.9);
   }
+`
+
+type RecipeListGroupItemProps = {
+  column?: boolean
+}
+
+export const RecipeListGroupItem = styled(ListGroupItem)<
+  RecipeListGroupItemProps
+>`
+  display: flex;
+  flex-direction: ${({ column }) => (column ? 'column' : 'row')};
+  justify-content: space-between;
 `

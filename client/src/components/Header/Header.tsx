@@ -89,10 +89,18 @@ const Header: React.FC = () => {
                 Калькуляторы
               </DropdownToggle>
               <DropdownMenu right>
-                <DropdownItem tag={Link} to="/calculators/ibu">
+                <DropdownItem
+                  tag={Link}
+                  to="/calculators/ibu"
+                  onClick={() => setToggle(false)}
+                >
                   IBU
                 </DropdownItem>
-                <DropdownItem tag={Link} to="/calculators/abv">
+                <DropdownItem
+                  tag={Link}
+                  to="/calculators/abv"
+                  onClick={() => setToggle(false)}
+                >
                   ABV
                 </DropdownItem>
               </DropdownMenu>
@@ -120,30 +128,51 @@ const Header: React.FC = () => {
                   <DropdownMenu right>
                     {isOnline && (
                       <>
-                        <DropdownItem tag={Link} to="/add-recipe">
+                        <DropdownItem
+                          tag={Link}
+                          to="/add-recipe"
+                          onClick={() => setToggle(false)}
+                        >
                           Добавить рецепт
                         </DropdownItem>
                         <DropdownItem divider />
                       </>
                     )}
-                    <DropdownItem tag={Link} to="/favorites">
+                    <DropdownItem
+                      tag={Link}
+                      to="/favorites"
+                      onClick={() => setToggle(false)}
+                    >
                       Избранные ♥
                     </DropdownItem>
-                    <DropdownItem tag={Link} to="/my-recipes">
+                    <DropdownItem
+                      tag={Link}
+                      to="/my-recipes"
+                      onClick={() => setToggle(false)}
+                    >
                       Мои рецепты
                     </DropdownItem>
-                    <DropdownItem tag={Link} to="/my-brews">
+                    <DropdownItem
+                      tag={Link}
+                      to="/my-brews"
+                      onClick={() => setToggle(false)}
+                    >
                       Мои варки
                     </DropdownItem>
                     {isOnline && (
                       <>
                         <DropdownItem divider />
-                        <DropdownItem tag={Link} to="/settings">
+                        <DropdownItem
+                          tag={Link}
+                          to="/settings"
+                          onClick={() => setToggle(false)}
+                        >
                           Настройки
                         </DropdownItem>
                         <DropdownItem divider />
                         <DropdownItem
                           onClick={() => {
+                            setToggle(false)
                             history.push('/')
                             doLogout()
                           }}

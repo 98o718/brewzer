@@ -21,6 +21,10 @@ export const ButtonsWrapper = styled.div`
   flex-wrap: wrap;
   justify-content: flex-end;
   align-items: center;
+
+  @media (max-width: 576px) {
+    justify-content: center;
+  }
 `
 
 export const VolumeInput = styled(Input)`

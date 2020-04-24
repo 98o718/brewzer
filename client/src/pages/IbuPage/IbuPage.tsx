@@ -19,6 +19,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { IbuPageWrapper, ItemWrapper, ListButton } from './IbuPage.styles'
 import { CalculatorHop, Hop } from '../../types'
 import { ibuCalculator } from '../../utils'
+import { Global, css } from '@emotion/core'
 
 const IbuPage: React.FC = () => {
   const [{ batchVolume, volume, og }, setInformation] = useState<{
@@ -94,6 +95,15 @@ const IbuPage: React.FC = () => {
 
   return (
     <IbuPageWrapper>
+      <Global
+        styles={css`
+          .wrapped-col {
+            @media (max-width: 675px) {
+              flex-basis: unset;
+            }
+          }
+        `}
+      />
       <h2>Калькулятор IBU</h2>
       <p style={{ color: 'rgba(0, 0, 0, 0.5)', marginBottom: 5 }}>
         Введите все данные, IBU будет расчитано автоматически
@@ -101,7 +111,7 @@ const IbuPage: React.FC = () => {
       <h3>IBU = {calculateIbu(hops)}</h3>
       <Form>
         <Row form>
-          <Col>
+          <Col className="wrapped-col">
             <FormGroup>
               <Label for="batchVolume">Объем до кипячения</Label>
               <Input
@@ -115,7 +125,7 @@ const IbuPage: React.FC = () => {
               />
             </FormGroup>
           </Col>
-          <Col>
+          <Col className="wrapped-col">
             <FormGroup>
               <Label for="volume">Объем после кипячения</Label>
               <Input
@@ -129,7 +139,7 @@ const IbuPage: React.FC = () => {
               />
             </FormGroup>
           </Col>
-          <Col>
+          <Col className="wrapped-col">
             <FormGroup>
               <Label for="og">Начальная плотность</Label>
               <Input
