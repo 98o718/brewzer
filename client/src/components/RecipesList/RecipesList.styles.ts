@@ -100,6 +100,10 @@ export const RecipeListGroupItem = styled(ListGroupItem)<
   RecipeListGroupItemProps
 >`
   display: flex;
-  flex-direction: ${({ column }) => (column ? 'column' : 'row')};
+  flex-direction: row;
   justify-content: space-between;
+
+  @media (max-width: 576px) {
+    flex-direction: ${({ column }) => (column ? 'column' : 'row')};
+  }
 `
