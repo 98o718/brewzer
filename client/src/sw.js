@@ -34,7 +34,7 @@ workbox.precaching.precacheAndRoute(self.__WB_MANIFEST)
 // API with network-first strategy
 workbox.routing.registerRoute(
   /(http[s]?:\/\/)?([^\/\s]+\/)api/,
-  workbox.strategies.networkFirst(),
+  new workbox.strategies.NetworkFirst(),
 )
 
 // API with cache-first strategy
