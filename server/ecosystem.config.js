@@ -25,7 +25,7 @@ module.exports = {
       repo: 'git@github.com:98o718/brewzer.git',
       path: '/home/travis/brewzer-server',
       'post-deploy':
-        'git-crypt unlock && cd server && yarn && yarn build && pm2 reload ecosystem.config.js --env production',
+        'git-crypt unlock ~/unlock.key && cd server && yarn && yarn build && pm2 reload ecosystem.config.js --env production',
     },
   },
 }
