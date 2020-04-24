@@ -50,8 +50,8 @@
   "proxy": "http://localhost:3000",
   "scripts": {
     "start": "PORT=3002 react-scripts start",
-    "build-sw": "react-scripts build && rm -rf build/mocks && node workbox-build",
-    "build": "react-scripts build && rm -rf build/mocks",
+    "build-sw": "react-scripts build && node workbox-build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
