@@ -25,6 +25,7 @@ import {
 } from './Header.styles'
 import { userAtom, logout } from '../../model'
 import { useOnlineDetector } from '../../hooks'
+import axios from 'axios'
 
 const Header: React.FC = () => {
   const [toggle, setToggle] = useState(false)
@@ -37,13 +38,19 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     if (isOnline) {
+      if (user !== null) {
+        axios.get(`${process.env.REACT_APP_USER_RECIPES_URL}/${user.username}`)
+        axios.get(process.env.REACT_APP_FAVORITE_RECIPES_URL!)
+        axios.get(process.env.REACT_APP_BREWS_URL!)
+      }
+
       const token = new Cookies().get('accessToken')
 
       if (!token) {
         doLogout()
       }
     }
-  }, [doLogout, isOnline])
+  }, [doLogout, isOnline, user])
 
   useEffect(() => {
     history.listen(() => {

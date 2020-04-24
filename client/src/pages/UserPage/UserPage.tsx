@@ -1,7 +1,7 @@
 import React from 'react'
 import { RouteComponentProps, Redirect } from 'react-router-dom'
 
-import { useFetch } from '../../hooks'
+import { useFetch, useOnlineDetector } from '../../hooks'
 import { RecipesList } from '../../components'
 import { RecipeDescription } from '../../types'
 import { toast } from 'react-toastify'
@@ -23,8 +23,10 @@ const UserPage = ({ match }: RouteComponentProps<UserPageProps>) => {
     'title',
   )
 
+  const { isOnline } = useOnlineDetector()
+
   if (error) {
-    toast.error('Ничего не найдено!')
+    toast.error(isOnline ? 'Ничего не найдено!' : 'Необходим интернет!')
 
     return <Redirect to="/" />
   }
