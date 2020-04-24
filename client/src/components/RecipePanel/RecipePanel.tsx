@@ -132,7 +132,7 @@ const RecipePanel = ({
           )}
         </ButtonsWrapper>
       )}
-      {canVote && (
+      {canVote && isOnline && (
         <RatingWrapper>
           {voting ? (
             <BarLoader width="180px" />
