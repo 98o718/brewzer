@@ -13,7 +13,6 @@ export const useFetch = <T>(
     axios
       .get(id ? `${url}/${id}` : url)
       .then(({ data, status }) => {
-        console.log(data, status)
         setData(data)
         setLoading(false)
       })
