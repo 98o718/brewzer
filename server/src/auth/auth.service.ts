@@ -78,6 +78,7 @@ export class AuthService {
           path: '/',
           maxAge: config.get('jwt').expiresInRefresh,
           httpOnly: true,
+          secure: true,
         },
       },
       {
@@ -85,6 +86,7 @@ export class AuthService {
         value: `Bearer ${accessToken}`,
         options: {
           path: '/',
+          secure: true,
         },
       },
     ]
@@ -162,6 +164,7 @@ export class AuthService {
           path: '/',
           maxAge: config.get('jwt').expiresInRefresh,
           httpOnly: true,
+          secure: true,
         },
       },
       {
@@ -169,6 +172,7 @@ export class AuthService {
         value: `Bearer ${accessToken}`,
         options: {
           path: '/',
+          secure: true,
         },
       },
     ]
