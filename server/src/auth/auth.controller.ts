@@ -3,9 +3,7 @@ import {
   Get,
   Post,
   UseGuards,
-  UseInterceptors,
   Body,
-  Req,
   ValidationPipe,
 } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
@@ -15,9 +13,7 @@ import { AuthService } from './auth.service'
 import { UserCredentials } from './dto/user-credentials.dto'
 import { GetUser } from './decorators/get-user.decorator'
 import { User } from '../users/interfaces/user.interface'
-import { SetCookieInterceptor } from './interceptors/set-cookie.interceptor'
 import { RefreshTokenDto } from './dto/refresh-token.dto'
-import { GetCookies } from './decorators/get-cookies.decorator'
 import { UserInfo } from 'src/users/interfaces/user-info.interface'
 import { GetIp } from './decorators/get-ip.decorator'
 
@@ -32,15 +28,13 @@ export class AuthController {
     type: UserCredentials,
     required: true,
   })
-  @UseInterceptors(SetCookieInterceptor)
   @Post('signin')
   async login(
     @GetUser() user: User,
     @Body('fingerprint') fingerpring: string,
     @GetIp() ip: string,
-    @Req() req,
   ) {
-    return await this.authService.login(user, fingerpring, ip, req)
+    return await this.authService.login(user, fingerpring, ip)
   }
 
   @ApiImplicitBody({
@@ -48,20 +42,12 @@ export class AuthController {
     type: RefreshTokenDto,
     required: true,
   })
-  @UseInterceptors(SetCookieInterceptor)
   @Post('refresh-token')
   async refreshToken(
     @Body(ValidationPipe) refreshTokenDto: RefreshTokenDto,
     @GetIp() ip: string,
-    @GetCookies() cookies: { [key: string]: any } | undefined,
-    @Req() req,
   ) {
-    return await this.authService.refreshToken(
-      refreshTokenDto,
-      ip,
-      cookies,
-      req,
-    )
+    return await this.authService.refreshToken(refreshTokenDto, ip)
   }
 
   @UseGuards(AuthGuard('jwt'))

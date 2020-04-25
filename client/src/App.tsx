@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import { Layout, BeerWave, NoPrint } from './components'
 import { Router } from './Router'
+import localforage from 'localforage'
 
 const App = ({ store }: { store: Store }) => {
   // eslint-disable-next-line
@@ -18,7 +19,7 @@ const App = ({ store }: { store: Store }) => {
 
   useEffect(() => {
     return store.subscribe(() =>
-      localStorage.setItem('app_store', JSON.stringify(store.getState())),
+      localforage.setItem('app_store', JSON.stringify(store.getState())),
     )
   })
 

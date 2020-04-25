@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { RouteComponentProps, Redirect } from 'react-router-dom'
 
 import {
@@ -20,10 +20,8 @@ type RecipePageProps = {
 const RecipePage = ({ match }: RouteComponentProps<RecipePageProps>) => {
   const user = useAtom(userAtom)
 
-  const [recipe, loading, error, handleLoad] = useFetch<RecipeDescription>(
-    process.env.REACT_APP_RECIPES_URL!,
-    match.params.id,
-    [
+  const fallbackUrls = useMemo(
+    () => [
       user !== null
         ? `${process.env.REACT_APP_USER_RECIPES_URL}/${user.username}`
         : process.env.REACT_APP_FAVORITE_RECIPES_URL!,
@@ -31,6 +29,13 @@ const RecipePage = ({ match }: RouteComponentProps<RecipePageProps>) => {
       process.env.REACT_APP_POPULAR_RECIPES_URL!,
       process.env.REACT_APP_FAVORITE_RECIPES_URL!,
     ],
+    [user],
+  )
+
+  const [recipe, loading, error, handleLoad] = useFetch<RecipeDescription>(
+    process.env.REACT_APP_RECIPES_URL!,
+    match.params.id,
+    fallbackUrls,
     'id',
   )
   const { multiplier, ...recipePanelProps } = useRecipePanel(recipe, handleLoad)

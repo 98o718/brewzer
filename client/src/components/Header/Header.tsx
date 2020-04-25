@@ -14,7 +14,6 @@ import {
 } from 'reactstrap'
 import { Link, useHistory } from 'react-router-dom'
 import Avatar from 'react-avatar'
-import { Cookies } from 'react-cookie'
 import { useAtom, useAction } from '@reatom/react'
 
 import {
@@ -26,6 +25,7 @@ import {
 import { userAtom, logout } from '../../model'
 import { useOnlineDetector } from '../../hooks'
 import axios from 'axios'
+import localforage from 'localforage'
 
 const Header: React.FC = () => {
   const [toggle, setToggle] = useState(false)
@@ -44,22 +44,22 @@ const Header: React.FC = () => {
         axios.get(process.env.REACT_APP_BREWS_URL!)
       }
 
-      const token = new Cookies().get('accessToken')
-
-      if (!token) {
-        doLogout()
-      }
+      localforage.getItem('accessToken').then((token) => {
+        if (!token && user !== null) {
+          doLogout()
+        }
+      })
     }
   }, [doLogout, isOnline, user])
 
   useEffect(() => {
     history.listen(() => {
       if (isOnline) {
-        const token = new Cookies().get('accessToken')
-
-        if (!token) {
-          doLogout()
-        }
+        localforage.getItem('accessToken').then((token) => {
+          if (!token && user !== null) {
+            doLogout()
+          }
+        })
       }
     })
   }, [history, doLogout, isOnline, user])

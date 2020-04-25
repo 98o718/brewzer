@@ -31,6 +31,12 @@ workbox.routing.registerRoute(
   new workbox.strategies.NetworkFirst(),
 )
 
+workbox.routing.registerRoute(
+  new workbox.routing.NavigationRoute(
+    workbox.precaching.createHandlerBoundToURL('/index.html'),
+  ),
+)
+
 // API with cache-first strategy
 // workbox.routing.registerRoute(
 //   /(http[s]?:\/\/)?([^\/\s]+\/)favorites/,

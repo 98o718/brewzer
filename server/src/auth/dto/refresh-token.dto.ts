@@ -6,4 +6,9 @@ export class RefreshTokenDto {
   @IsNotEmpty()
   @IsString()
   fingerprint: string
+
+  @ApiModelProperty()
+  @IsNotEmpty()
+  @IsString()
+  refreshToken: string
 }

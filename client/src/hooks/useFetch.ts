@@ -55,7 +55,7 @@ export const useFetch = <T>(
           setError(true)
         }
       })
-  }, [id, url])
+  }, [id, url, fallbackUrls, fallbackProperty])
 
   useEffect(() => {
     setLoading(true)

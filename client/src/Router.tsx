@@ -26,13 +26,11 @@ import {
   SearchPage,
 } from './pages'
 import { userAtom } from './model'
-import Cookies from 'universal-cookie'
 
 export const Router = () => {
   const user = useAtom(userAtom)
-  const token = new Cookies().get('accessToken')
 
-  const isAuthenticated = user !== null && !!token
+  const isAuthenticated = user !== null
 
   return (
     <BrowserRouter>

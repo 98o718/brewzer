@@ -24,6 +24,7 @@ import { BarLoader } from 'react-spinners'
 import { toast } from 'react-toastify'
 import { useHistory } from 'react-router'
 import { getFingerprint } from '../../utils/getFingerprint'
+import localforage from 'localforage'
 
 const SignInPage: React.FC = () => {
   const history = useHistory()
@@ -92,9 +93,11 @@ const SignInPage: React.FC = () => {
       body: JSON.stringify({ ...credentials, fingerprint }),
     })
 
-    const data = await r.json()
+    const { accessToken, refreshToken, ...data } = await r.json()
 
     if (r.ok) {
+      await localforage.setItem('accessToken', accessToken)
+      await localforage.setItem('refreshToken', refreshToken)
       doSignIn(data)
       toast.success('Успешный вход!')
       history.push('/')

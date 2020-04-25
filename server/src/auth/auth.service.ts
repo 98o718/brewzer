@@ -30,7 +30,7 @@ export class AuthService {
     return null
   }
 
-  async login(user: User, fingerprint: string, ip: string, req: any) {
+  async login(user: User, fingerprint: string, ip: string) {
     const payload = { username: user.username, sub: user.id }
 
     const session = await this.session
@@ -70,44 +70,18 @@ export class AuthService {
       }).save()
     }
 
-    req._cookies = [
-      {
-        name: 'refreshToken',
-        value: refreshToken,
-        options: {
-          path: '/',
-          maxAge: config.get('jwt').expiresInRefresh,
-          httpOnly: true,
-        },
-      },
-      {
-        name: 'accessToken',
-        value: `Bearer ${accessToken}`,
-        options: {
-          path: '/',
-        },
-      },
-    ]
-
     return {
       username: user.username,
       fullAvatar: user.avatar,
       avatar: user.miniAvatar,
       sub: user.id,
+      accessToken,
+      refreshToken,
     }
   }
 
-  async refreshToken(
-    refreshTokenDto: RefreshTokenDto,
-    ip: string,
-    cookies: { [key: string]: any } | undefined,
-    req: any,
-  ) {
-    if (cookies === undefined) {
-      throw new UnauthorizedException('Invalid refresh token / fingerprint')
-    }
-
-    const { refreshToken } = cookies
+  async refreshToken(refreshTokenDto: RefreshTokenDto, ip: string) {
+    const { refreshToken, fingerprint } = refreshTokenDto
 
     if (!refreshToken) {
       throw new UnauthorizedException('Invalid refresh token / fingerprint')
@@ -124,7 +98,7 @@ export class AuthService {
     const session = await this.session
       .findOneAndDelete({
         refreshToken,
-        fingerprint: refreshTokenDto.fingerprint,
+        fingerprint,
       })
       .exec()
 
@@ -154,27 +128,9 @@ export class AuthService {
       ip,
     }).save()
 
-    req._cookies = [
-      {
-        name: 'refreshToken',
-        value: newRefreshToken,
-        options: {
-          path: '/',
-          maxAge: config.get('jwt').expiresInRefresh,
-          httpOnly: true,
-        },
-      },
-      {
-        name: 'accessToken',
-        value: `Bearer ${accessToken}`,
-        options: {
-          path: '/',
-        },
-      },
-    ]
-
     return {
       accessToken,
+      refreshToken: newRefreshToken,
     }
   }
 
