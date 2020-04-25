@@ -21,7 +21,7 @@ module.exports = {
     production: {
       user: 'travis',
       host: '51.15.124.103',
-      ref: 'origin/pwa',
+      ref: 'origin/master',
       repo: 'git@github.com:98o718/brewzer.git',
       path: '/home/travis/brewzer-server',
       'post-deploy':
