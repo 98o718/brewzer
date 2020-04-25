@@ -19,8 +19,8 @@ const App = ({ store }: { store: Store }) => {
   useEffect(() => connectReduxDevtools(store), [])
 
   useEffect(() => {
-    const cookies = new Cookies().get('token')
-    localforage.getItem('token').then((value) => {
+    const cookies = new Cookies().get('accessToken')
+    localforage.getItem('app_store').then((value) => {
       alert(cookies)
       alert(value)
     })
