@@ -1,5 +1,5 @@
 import { declareAction } from '@reatom/core'
-import { User, Tokens } from './types'
+import { User } from './types'
 
 export const signIn = declareAction<User>('sign_in')
 

@@ -12,7 +12,6 @@ import {
 
 import { ListGroup, UncontrolledTooltip, Button } from 'reactstrap'
 import { Link } from 'react-router-dom'
-import { isMobile } from 'react-device-detect'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes, faEdit } from '@fortawesome/free-solid-svg-icons'
 import { useAtom } from '@reatom/react'
@@ -48,7 +47,6 @@ const RecipesList = ({
     <RecipesListWrapper
       ref={headingRef ? headingRef : undefined}
       style={{ width }}
-      type={isMobile ? 'true' : undefined}
     >
       {heading && recipes !== undefined && <h2>{heading}</h2>}
       <ListGroup>
