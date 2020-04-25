@@ -45,7 +45,7 @@ const Header: React.FC = () => {
       }
 
       localforage.getItem('accessToken').then((token) => {
-        if (!token) {
+        if (!token && user !== null) {
           doLogout()
         }
       })
@@ -56,7 +56,7 @@ const Header: React.FC = () => {
     history.listen(() => {
       if (isOnline) {
         localforage.getItem('accessToken').then((token) => {
-          if (!token) {
+          if (!token && user !== null) {
             doLogout()
           }
         })
