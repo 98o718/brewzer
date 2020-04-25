@@ -12,10 +12,19 @@ import 'react-toastify/dist/ReactToastify.css'
 import { Layout, BeerWave, NoPrint } from './components'
 import { Router } from './Router'
 import localforage from 'localforage'
+import { Cookies } from 'react-cookie'
 
 const App = ({ store }: { store: Store }) => {
   // eslint-disable-next-line
   useEffect(() => connectReduxDevtools(store), [])
+
+  useEffect(() => {
+    const cookies = new Cookies().get('token')
+    localforage.getItem('token').then((value) => {
+      alert(cookies)
+      alert(value)
+    })
+  }, [])
 
   useEffect(() => {
     return store.subscribe(() =>
