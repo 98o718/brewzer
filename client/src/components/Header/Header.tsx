@@ -26,6 +26,7 @@ import {
 import { userAtom, logout } from '../../model'
 import { useOnlineDetector } from '../../hooks'
 import axios from 'axios'
+import localforage from 'localforage'
 
 const Header: React.FC = () => {
   const [toggle, setToggle] = useState(false)
@@ -44,11 +45,11 @@ const Header: React.FC = () => {
         axios.get(process.env.REACT_APP_BREWS_URL!)
       }
 
-      const token = new Cookies().get('accessToken')
-
-      if (!token) {
-        doLogout()
-      }
+      localforage.getItem('accessToken').then((token) => {
+        if (!token) {
+          doLogout()
+        }
+      })
     }
   }, [doLogout, isOnline, user])
 
