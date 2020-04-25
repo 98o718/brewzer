@@ -14,7 +14,6 @@ import {
 } from 'reactstrap'
 import { Link, useHistory } from 'react-router-dom'
 import Avatar from 'react-avatar'
-import { Cookies } from 'react-cookie'
 import { useAtom, useAction } from '@reatom/react'
 
 import {
@@ -56,11 +55,11 @@ const Header: React.FC = () => {
   useEffect(() => {
     history.listen(() => {
       if (isOnline) {
-        const token = new Cookies().get('accessToken')
-
-        if (!token) {
-          doLogout()
-        }
+        localforage.getItem('accessToken').then((token) => {
+          if (!token) {
+            doLogout()
+          }
+        })
       }
     })
   }, [history, doLogout, isOnline, user])
