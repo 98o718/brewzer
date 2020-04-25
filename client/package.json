@@ -28,6 +28,7 @@
     "emotion-normalize": "^10.1.0",
     "fingerprintjs2": "^2.1.0",
     "jsonwebtoken": "^8.5.1",
+    "localforage": "^1.7.3",
     "react": "^16.10.2",
     "react-autosize-textarea": "^7.0.0",
     "react-avatar": "https://github.com/98o718/react-avatar.git",
