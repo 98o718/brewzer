@@ -18,6 +18,12 @@ const App = ({ store }: { store: Store }) => {
   useEffect(() => connectReduxDevtools(store), [])
 
   useEffect(() => {
+    localforage.getItem('accessToken').then((value) => {
+      alert(value)
+    })
+  }, [])
+
+  useEffect(() => {
     return store.subscribe(() =>
       localforage.setItem('app_store', JSON.stringify(store.getState())),
     )
