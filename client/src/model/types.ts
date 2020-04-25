@@ -4,3 +4,8 @@ export type User = {
   fullAvatar: string
   sub: string
 }
+
+export type Tokens = {
+  accessToken: string
+  refreshToken: string
+}

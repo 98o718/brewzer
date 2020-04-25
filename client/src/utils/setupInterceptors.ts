@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { getFingerprint } from './getFingerprint'
-import Cookies from 'universal-cookie'
 import { Store } from '@reatom/core'
 import { logout } from '../model'
+import localforage from 'localforage'
 
 let isAlreadyFetchingAccessToken = false
 let subscribers: any[] = []
@@ -17,14 +17,18 @@ const addSubscriber = (callback: any) => {
 
 export const setupInterceptors = (store: Store) => {
   axios.interceptors.request.use(
-    (config) => {
-      const token = new Cookies().get('accessToken')
+    async (config) => {
+      try {
+        const token = await localforage.getItem('accessToken')
 
-      if (!!token) {
-        config.headers.Authorization = token
+        if (!!token) {
+          config.headers.Authorization = `Bearer ${token}`
+        }
+
+        return config
+      } catch (error) {
+        return config
       }
-
-      return config
     },
     (err) => Promise.reject(err),
   )
@@ -45,13 +49,16 @@ export const setupInterceptors = (store: Store) => {
         if (!isAlreadyFetchingAccessToken) {
           isAlreadyFetchingAccessToken = true
 
-          getFingerprint()
-            .then((fingerprint) =>
+          Promise.all([getFingerprint(), localforage.getItem('refreshToken')])
+            .then(([fingerprint, refreshToken]) =>
               axios.post(process.env.REACT_APP_REFRESH_TOKEN_URL!, {
                 fingerprint,
+                refreshToken,
               }),
             )
-            .then(({ data: { accessToken } }) => {
+            .then(async ({ data: { accessToken, refreshToken } }) => {
+              await localforage.setItem('accessToken', accessToken)
+              await localforage.setItem('refreshToken', refreshToken)
               isAlreadyFetchingAccessToken = false
               onAccessTokenFetched(accessToken)
             })
