@@ -126,37 +126,39 @@ const Comments = ({
             <SyncLoader color="#007aff" />
           </ListGroupItem>
         )}
-        <ListGroupItem className="d-flex flex-row align-items-center justify-content-center pt-4">
-          <Form onSubmit={(e) => e.preventDefault()}>
-            <Row form>
-              <Col>
-                <FormGroup className="d-flex flex-row align-items-center justify-content-center">
-                  <CommentsInput
-                    type="textarea"
-                    spellCheck={false}
-                    name="description"
-                    tag={TextareaAutosize}
-                    id="description"
-                    placeholder="Комментарий"
-                    onChange={changeText}
-                    value={text}
-                  />
-                </FormGroup>
-              </Col>
-              <Col className="d-flex flex-row justify-content-center">
-                <FormGroup>
-                  <Button
-                    color="primary"
-                    onClick={handleSubmit}
-                    disabled={sending}
-                  >
-                    Добавить
-                  </Button>
-                </FormGroup>
-              </Col>
-            </Row>
-          </Form>
-        </ListGroupItem>
+        {username !== undefined && (
+          <ListGroupItem className="d-flex flex-row align-items-center justify-content-center pt-4">
+            <Form onSubmit={(e) => e.preventDefault()}>
+              <Row form>
+                <Col>
+                  <FormGroup className="d-flex flex-row align-items-center justify-content-center">
+                    <CommentsInput
+                      type="textarea"
+                      spellCheck={false}
+                      name="description"
+                      tag={TextareaAutosize}
+                      id="description"
+                      placeholder="Комментарий"
+                      onChange={changeText}
+                      value={text}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col className="d-flex flex-row justify-content-center">
+                  <FormGroup>
+                    <Button
+                      color="primary"
+                      onClick={handleSubmit}
+                      disabled={sending}
+                    >
+                      Добавить
+                    </Button>
+                  </FormGroup>
+                </Col>
+              </Row>
+            </Form>
+          </ListGroupItem>
+        )}
       </ListGroup>
       {comments !== undefined && !!comments.length && (
         <Pagination aria-label="Comments navigation">
