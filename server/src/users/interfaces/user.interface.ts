@@ -1,5 +1,5 @@
 import { Document } from 'mongoose'
-import { Recipe } from 'src/recipes/interfaces/recipe.interface'
+import { Recipe } from '../../recipes/interfaces/recipe.interface'
 
 export interface User extends Document {
   email: string

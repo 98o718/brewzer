@@ -14,7 +14,7 @@ import { UserCredentials } from './dto/user-credentials.dto'
 import { GetUser } from './decorators/get-user.decorator'
 import { User } from '../users/interfaces/user.interface'
 import { RefreshTokenDto } from './dto/refresh-token.dto'
-import { UserInfo } from 'src/users/interfaces/user-info.interface'
+import { UserInfo } from '../users/interfaces/user-info.interface'
 import { GetIp } from './decorators/get-ip.decorator'
 
 @Controller('auth')

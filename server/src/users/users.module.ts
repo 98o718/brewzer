@@ -4,8 +4,8 @@ import { UsersController } from './users.controller'
 import { MongooseModule } from '@nestjs/mongoose'
 import { UserSchema } from './schemas/user.schema'
 import { CloudinaryService } from '../cloudinary/cloudinary.service'
-import { CloudinaryModule } from 'src/cloudinary/cloudinary.module'
-import { BcryptModule } from 'src/bcrypt/bcrypt.module'
+import { CloudinaryModule } from '../cloudinary/cloudinary.module'
+import { BcryptModule } from '../bcrypt/bcrypt.module'
 
 @Module({
   imports: [

@@ -77,6 +77,7 @@ const BrewForm = ({
               <FormGroup>
                 <Label for="volume">Объем</Label>
                 <Input
+                  data-testid="input-volume"
                   type="number"
                   name="volume"
                   id="volume"
@@ -91,6 +92,7 @@ const BrewForm = ({
               <FormGroup>
                 <Label for="og">НП</Label>
                 <Input
+                  data-testid="input-og"
                   type="number"
                   name="og"
                   id="og"
@@ -105,6 +107,7 @@ const BrewForm = ({
               <FormGroup>
                 <Label for="fg">КП</Label>
                 <Input
+                  data-testid="input-fg"
                   type="number"
                   name="fg"
                   id="fg"
@@ -119,6 +122,7 @@ const BrewForm = ({
           <Row form style={{ width: '100%' }}>
             <FormGroup style={{ width: '100%' }}>
               <Input
+                data-testid="input-comment"
                 type="textarea"
                 name="comment"
                 tag={TextareaAutosize}
@@ -159,6 +163,7 @@ const BrewForm = ({
           </DataWrapper>
           <ButtonContainer>
             <Button
+              data-testid="button-submit"
               style={{ width: 200 }}
               onClick={handleSubmit}
               color="success"

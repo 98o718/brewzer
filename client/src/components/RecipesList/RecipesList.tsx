@@ -130,10 +130,14 @@ const RecipesList = ({
                   </Button>
                   {user !== null && user.sub === recipe.userId && (
                     <>
-                      <IconButton onClick={handleEdit.bind(null, recipe.id)}>
+                      <IconButton
+                        data-testid="edit-button"
+                        onClick={handleEdit.bind(null, recipe.id)}
+                      >
                         <FontAwesomeIcon icon={faEdit} />
                       </IconButton>
                       <IconButton
+                        data-testid="delete-button"
                         color="red"
                         onClick={handleDelete.bind(null, recipe.id)}
                       >

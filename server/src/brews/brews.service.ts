@@ -18,7 +18,13 @@ export class BrewsService {
   }
 
   async findById(id: string, user: UserInfo): Promise<Brew> {
-    return await this.brew.findOne({ _id: id, userId: user.userId }).exec()
+    const brew = await this.brew
+      .findOne({ _id: id, userId: user.userId })
+      .exec()
+
+    if (brew) return brew
+
+    throw new NotFoundException()
   }
 
   async edit(

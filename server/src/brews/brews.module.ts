@@ -3,7 +3,7 @@ import { BrewsService } from './brews.service'
 import { BrewsController } from './brews.controller'
 import { MongooseModule } from '@nestjs/mongoose'
 import { BrewSchema } from './schemas/brew.schema'
-import { AuthModule } from 'src/auth/auth.module'
+import { AuthModule } from '../auth/auth.module'
 
 @Module({
   imports: [

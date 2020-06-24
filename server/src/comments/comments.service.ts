@@ -4,7 +4,7 @@ import { PaginateModel, PaginateResult } from 'mongoose'
 import { UserInfo } from '../users/interfaces/user-info.interface'
 import { Comment } from './interfaces/comment.interface'
 import { AddCommentDto } from './dto/add-comment.dto'
-import { UsersService } from 'src/users/users.service'
+import { UsersService } from '../users/users.service'
 
 @Injectable()
 export class CommentsService {

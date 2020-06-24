@@ -448,7 +448,7 @@ export class RecipesService {
         `Recipe with id: "${id}" not found or you haven't permission to edit them.`,
       )
     } else if (editable.recipeType === editRecipeDto.recipeType) {
-      return editable.updateOne(editRecipeDto)
+      return this.recipe.findByIdAndUpdate(id, editRecipeDto, { new: true })
     } else {
       switch (editable.recipeType) {
         case RecipeType.PUBLIC: {

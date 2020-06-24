@@ -2,7 +2,7 @@ import React from 'react'
 import { ListGroup, ListGroupItem, Progress } from 'reactstrap'
 import { BarLoader } from 'react-spinners'
 import { Link } from 'react-router-dom'
-import { format, formatDistanceToNow } from 'date-fns'
+import { format, formatDistanceToNow, formatDistance } from 'date-fns'
 import { ru } from 'date-fns/locale'
 
 import {
@@ -16,7 +16,6 @@ import {
   BrewComment,
 } from './BrewsList.styles'
 import { BrewDescription } from '../../types'
-import { formatDistance } from 'date-fns/esm'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTimes } from '@fortawesome/free-solid-svg-icons'
 
@@ -65,10 +64,14 @@ const BrewsList = ({
                   <Link to={`/recipes/${brew.recipe}`}>{brew.title}</Link>
                   {showButtons && (
                     <ButtonsWrapper>
-                      <IconButton onClick={handleEdit.bind(null, brew.id)}>
+                      <IconButton
+                        data-testid="edit-button"
+                        onClick={handleEdit.bind(null, brew.id)}
+                      >
                         <FontAwesomeIcon icon={faEdit} />
                       </IconButton>
                       <IconButton
+                        data-testid="delete-button"
                         color="red"
                         onClick={handleDelete.bind(null, brew.id)}
                       >

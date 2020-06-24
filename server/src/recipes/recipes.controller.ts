@@ -21,7 +21,6 @@ import { GetUser } from '../auth/decorators/get-user.decorator'
 import { UserInfo } from '../users/interfaces/user-info.interface'
 import { AuthInterceptor } from '../auth/interceptors/auth.interceptor'
 import { RateRecipeDto } from './dto/rate-recipe.dto'
-import { userInfo } from 'os'
 import { SelectRecipesDto } from './dto/select-recipes.dto'
 
 @Controller('recipes')
