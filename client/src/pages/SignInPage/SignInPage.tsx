@@ -80,6 +80,7 @@ const SignInPage: React.FC = () => {
 
     if (isInvalid) {
       toast.error('Проверьте форму!')
+      setLoading(false)
       return
     }
 

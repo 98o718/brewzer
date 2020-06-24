@@ -37,14 +37,14 @@ const SignUpPage: React.FC = () => {
     avatar: null,
   })
 
-  const onDrop = useCallback(acceptedFiles => {
+  const onDrop = useCallback((acceptedFiles) => {
     setAvatar(URL.createObjectURL(acceptedFiles[0]))
-    setUser(prev => Object.assign({}, prev, { avatar: acceptedFiles }))
+    setUser((prev) => Object.assign({}, prev, { avatar: acceptedFiles }))
   }, [])
 
   const removeAvatar = () => {
     setAvatar('')
-    setUser(prev => Object.assign({}, prev, { avatar: null }))
+    setUser((prev) => Object.assign({}, prev, { avatar: null }))
   }
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
@@ -107,11 +107,13 @@ const SignUpPage: React.FC = () => {
 
     if (!agree) {
       toast.error('Согласитесь на обработку данных!')
+      setLoading(false)
       return
     }
 
     if (isInvalid) {
       toast.error('Проверьте форму!')
+      setLoading(false)
       return
     }
 
@@ -125,16 +127,17 @@ const SignUpPage: React.FC = () => {
       method: 'POST',
       body: formData,
     })
-      .then(r => {
+      .then((r) => {
         if (!r.ok) throw new Error('Ошибка регистрации')
         toast.success('Успешная регистрация!')
         setTimeout(() => {
           history.push('/signin')
         }, 1500)
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error)
         toast.error(error.message)
+        setLoading(false)
       })
   }
 
