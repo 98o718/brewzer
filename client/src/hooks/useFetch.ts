@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react'
 import axios from 'axios'
+import { useOnlineDetector } from './useOnlineDetector'
 
 export const useFetch = <T>(
   url: string,
@@ -10,6 +11,7 @@ export const useFetch = <T>(
   const [data, setData] = useState<T>()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
+  const { isOnline } = useOnlineDetector()
 
   const handleLoad = useCallback(() => {
     axios
@@ -22,6 +24,7 @@ export const useFetch = <T>(
         let entity: T | undefined = undefined
 
         if (
+          !isOnline &&
           fallbackUrls !== undefined &&
           fallbackUrls.length > 0 &&
           id !== undefined &&
@@ -55,7 +58,7 @@ export const useFetch = <T>(
           setError(true)
         }
       })
-  }, [id, url, fallbackUrls, fallbackProperty])
+  }, [id, url, fallbackUrls, fallbackProperty, isOnline])
 
   useEffect(() => {
     setLoading(true)

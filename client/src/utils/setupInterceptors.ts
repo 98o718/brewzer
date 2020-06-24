@@ -35,7 +35,7 @@ export const setupInterceptors = (store: Store) => {
 
   axios.interceptors.response.use(
     (response) => response,
-    (error) => {
+    async (error) => {
       const {
         config,
         response: { status },
@@ -49,19 +49,30 @@ export const setupInterceptors = (store: Store) => {
         if (!isAlreadyFetchingAccessToken) {
           isAlreadyFetchingAccessToken = true
 
-          Promise.all([getFingerprint(), localforage.getItem('refreshToken')])
-            .then(([fingerprint, refreshToken]) =>
-              axios.post(process.env.REACT_APP_REFRESH_TOKEN_URL!, {
+          const [fingerprint, refreshToken] = await Promise.all([
+            getFingerprint(),
+            localforage.getItem('refreshToken'),
+          ])
+
+          if (refreshToken === null) {
+            console.log('null')
+            isAlreadyFetchingAccessToken = false
+            subscribers = []
+            return Promise.reject(error)
+          } else {
+            const { data } = await axios.post(
+              process.env.REACT_APP_REFRESH_TOKEN_URL!,
+              {
                 fingerprint,
                 refreshToken,
-              }),
+              },
             )
-            .then(async ({ data: { accessToken, refreshToken } }) => {
-              await localforage.setItem('accessToken', accessToken)
-              await localforage.setItem('refreshToken', refreshToken)
-              isAlreadyFetchingAccessToken = false
-              onAccessTokenFetched(accessToken)
-            })
+
+            await localforage.setItem('accessToken', data.accessToken)
+            await localforage.setItem('refreshToken', data.refreshToken)
+            isAlreadyFetchingAccessToken = false
+            onAccessTokenFetched(data.accessToken)
+          }
         }
 
         const retryOriginalRequest = new Promise((resolve) => {
@@ -77,7 +88,7 @@ export const setupInterceptors = (store: Store) => {
       ) {
         store.dispatch(logout())
       }
-      console.error(error)
+      // console.error(error)
       return Promise.reject(error)
     },
   )
